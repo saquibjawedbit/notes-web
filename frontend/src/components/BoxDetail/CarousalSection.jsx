@@ -25,7 +25,7 @@ export function CarousalSection() {
   ];
 
     return (
-    <section className='w-full h-full flex gap-6 justify-center items-center flex-col sm:flex-row px-16'>
+    <section className='w-full h-full flex gap-8 md:gap-6 justify-center items-center flex-col sm:flex-row px-16'>
         {data.map((value) => <CarousalElement key={value.id} img={value.image} title={value.title} description={value.desc} />)}
     </section>
     );
