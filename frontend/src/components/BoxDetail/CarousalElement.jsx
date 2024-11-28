@@ -6,7 +6,7 @@ export function CarousalElement(props) {
             <h3 className="text-2xl text-black font-bold sm:order-2">{props.title}</h3>
             <p className="text-slate-600 sm:order-3">{props.description}</p>
             <img src={props.img} alt={props.title} className='sm:order-1'/>
-            
+            <p></p>
         </div>
     );
 }   
