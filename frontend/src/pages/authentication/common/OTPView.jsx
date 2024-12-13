@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 
-export function OTPView() {
+export function OTPView({onSubmit}) {
     const otp = ["", "", "", ""];
 
     const inputRefs = Array(otp.length)
@@ -9,11 +9,12 @@ export function OTPView() {
         .map(() => React.useRef());
 
     const handleChange = (e, index) => {
+
         const value = e.target.value;
         if (value.length === 1 && index < otp.length - 1) {
             inputRefs[index + 1].current.focus();
         }
-        else if (value.length === 0 && index > 0) {
+        else if ((value.length === 0) && index > 0) {
             inputRefs[index - 1].current.focus();
         }
         else if (value.length > 1) {
@@ -23,29 +24,36 @@ export function OTPView() {
         otp[index] = value[0];
 
         if (index == otp.length - 1 && value.length != 0) {
-            console.log(otp);
+            onSubmit(otp);
         }
     }
 
+
     function Timer() {
         const [seconds, setSeconds] = useState(30); // Set initial time (30 seconds)
-        const [isActive, setIsActive] = useState(true); // Track if the timer is running
-
+        let isActive = true; // Track if the timer is running
+        
         useEffect(() => {
-            let interval;
+            let interval = null;
             if (isActive && seconds > 0) {
                 interval = setInterval(() => {
                     setSeconds((prevSeconds) => prevSeconds - 1);
                 }, 1000); // Update every 1000ms (1 second)
             } else if (seconds === 0) {
                 clearInterval(interval); // Stop the timer once it reaches 0
-                setIsActive(false);
+                isActive = !isActive;
             }
 
             return () => clearInterval(interval); // Clean up interval on component unmount
-        }, [isActive]); // Re-run useEffect when `isActive` or `seconds` changes
+        }, [seconds]); // Re-run useEffect when `isActive` or `seconds` changes
 
-        return (<h3 className="text-sm">Didn't receive an OTP ? 00:{seconds} </h3>);
+        const resendOtp = (e) => {
+            setSeconds(30);
+            isActive = true;
+        }
+
+
+        return (<h3 className="text-sm font-light">Didn't receive an OTP ? { (seconds !== 0) ? (<span className='font-semibold'>00:{seconds.toString().padStart(2, '0')} </span>) : (<button className="font-semibold" onClick={resendOtp}>Resend</button>)} </h3>);
     }
 
     return (

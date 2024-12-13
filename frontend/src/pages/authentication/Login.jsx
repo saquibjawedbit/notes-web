@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import { OTPView } from "./OTPView";
+import { Link } from 'react-router-dom';
+import { OTPView } from "./common/OTPView";
 
 export function Login() {
     const credential = {
@@ -9,11 +9,9 @@ export function Login() {
     }
 
     const [OtpScreen, setOtpScreen] = useState(false);
-    const navigate = useNavigate();
 
     function onSubmit(e) {
         e.preventDefault();
-        console.log(credential);
         setOtpScreen(true);
     }
 
@@ -56,12 +54,12 @@ export function Login() {
                     />
                 </div>
                 <div className="self-end text-xs mb-2">
-                    <a href="">Forgot Password ?</a>
+                    <Link to='/forgotPassword'>Forgot Password ?</Link>
                 </div>
                 <button type="submit" className="text-xl text-white bg-black rounded-lg w-full py-2"> Login </button>
             </form>
             <div className="text-xs md:text-sm mt-2">
-                <p>Don't have an account.<span className="text-blue-600 cursor-pointer">  Create one ?</span></p>
+                <p>Don't have an account.<Link className="text-blue-600" to='/signup'>  Create one ?</Link></p>
             </div>
         </div> : <OTPView/>
         }
