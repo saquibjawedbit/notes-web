@@ -19,6 +19,17 @@ const noteScheme = new mongoose.Schema(
             type: String,
             required: true,
         },
+        class: [
+            {
+                type: String,
+                enum: ["IX", "X", "XI", "XII", "JEE", "NEET"],
+                required: true,
+            }
+        ],
+        Subject: {
+            type: String,
+            enum: ["MATH", "PHYSICS", "CHEMISTRY", "BIOLOGY"],
+        },
         purchased: {
             type: Number,
             default: 0,

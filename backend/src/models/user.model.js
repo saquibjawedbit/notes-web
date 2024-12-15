@@ -16,6 +16,13 @@ const userSchema = new Schema(
             type: String,
             required: [true, "Password is Required"],
         },
+        class: [
+            {
+                type: String,
+                enum: ["IX", "X", "XI", "XII", "JEE", "NEET"],
+            
+            }
+        ],
         purchasedPdf: [
             {
                 type: Schema.Types.ObjectId,
