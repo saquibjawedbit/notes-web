@@ -2,6 +2,7 @@ import {asyncHandler} from '../utils/asyncHandler.js';
 import { ApiError } from '../utils/ApiError.js';
 import {User} from '../models/user.model.js';
 import ApiResponse from '../utils/ApiResponse.js';
+import jwt from 'jsonwebtoken';
 
 
 const generateAccessAndRefreshTokens = async (user) => {
@@ -131,16 +132,46 @@ const logoutUser = asyncHandler(async (req, res) => {
 });  
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
-    const {refreshToken} = req.cookies.refreshToken || req.body.refreshToken;
+    try {
+        const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
     
-    if(!refreshToken) {
-        throw new ApiError(400, "Refresh Token is Required");
+        if(!incomingRefreshToken) {
+            throw new ApiError(400, "Refresh Token is Required");
+        }
+    
+        const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);  
+    
+        const user = await User.findById(decodedToken?._id);
+    
+        if(!user) {
+            throw new ApiError(401, "Invalid Refresh Token");
+        }
+    
+        if(incomingRefreshToken !== user?.refreshToken) {
+            throw new ApiError(401, "Invalid Refresh Token");
+        }
+    
+        const options = {
+            httpOnly: true,
+            secure: true,
+        };
+    
+        const {accessToken, refreshToken} = await generateAccessAndRefreshTokens(user);
+    
+        return res.status(200)
+        .cookies("accessToken", accessToken, options)
+        .cookies("refreshToken", refreshToken, options)
+        .json(
+            new ApiResponse(200, {accessToken}, "Access Token Refreshed Successfully"),
+        );
+    } catch (error) {
+        throw new ApiError(401, error?.message || "Invalid Refresh Token");
     }
-
 });
 
 export  {
     registerUser, 
     loginUser,
     logoutUser,
+    refreshAccessToken
 };
