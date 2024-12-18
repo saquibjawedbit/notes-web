@@ -169,9 +169,57 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     }
 });
 
+const changeCurrentUserPassword = asyncHandler(async (req, res) => {
+    const {oldPassword, newPassword} = req.body;
+
+    const user = req.user;
+    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
+
+    if(!isPasswordCorrect) {
+        throw new ApiError(401, "Old Password is Incorrect");
+    }
+
+    user.password = newPassword;
+    await user.save({validateBeforeSave: false});
+
+    return res.status(200)
+    .json(
+        new ApiResponse(200, {}, "Password Changed Successfully"),
+    );
+});
+
+const getCurrentUser = asyncHandler(async (req, res) => {
+    const user = req.user;
+
+    return res.status(200)
+    .json(
+        new ApiResponse(200, user, "User Details Fetched Successfully"),
+    );
+});
+
+const updateAccountDetails = asyncHandler(async (req, res) => {
+    const user = req.user;
+
+    if(!req.body.class) {
+        throw new ApiError(400, "Class is Required");
+    }
+
+    user.class = req.body.class;
+
+    await user.save({validateBeforeSave: false});
+
+    return res.status(200)
+    .json(
+        new ApiResponse(200, user, "User Details Updated Successfully"),
+    );
+});
+
 export  {
     registerUser, 
     loginUser,
     logoutUser,
-    refreshAccessToken
+    refreshAccessToken,
+    changeCurrentUserPassword,
+    getCurrentUser,
+    updateAccountDetails,
 };
