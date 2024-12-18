@@ -16,13 +16,13 @@ const userSchema = new Schema(
             type: String,
             required: [true, "Password is Required"],
         },
-        class: [
+        class:
             {
                 type: String,
                 enum: ["IX", "X", "XI", "XII", "JEE", "NEET"],
             
             }
-        ],
+        ,
         purchasedPdf: [
             {
                 type: Schema.Types.ObjectId,
@@ -74,7 +74,6 @@ userSchema.methods.generateRefreshToken = function(){
     jwt.sign(
         {
             _id: this._id,
-
         },
         process.env.REFRESH_TOKEN_SECRET,
         {
