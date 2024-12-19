@@ -32,7 +32,7 @@ export function NavBar() {
 
           <div className={`hidden lg:flex lg:flex-row gap-6 items-center`}>
             <NavLink to="/" className='font-semibold hover:font-bold transition duration-600'>Home</NavLink>
-            <NavLink to="/Notes" className='font-semibold hover:font-bold transition duration-600'>Notes</NavLink>
+            <NavLink to="/notes" className='font-semibold hover:font-bold transition duration-600'>Notes</NavLink>
             <NavLink to="/contact-us" className='font-semibold hover:font-bold transition duration-600'>Testimonals</NavLink>
             <NavLink to="/about-us" className='font-semibold hover:font-bold transition duration-600'>About Us</NavLink>
 

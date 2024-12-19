@@ -6,7 +6,7 @@ export function OTPView({onSubmit}) {
 
     const inputRefs = Array(otp.length)
         .fill(0)
-        .map(() => React.useRef());
+        .map(() => React.createRef());
 
     const handleChange = (e, index) => {
 
@@ -47,7 +47,7 @@ export function OTPView({onSubmit}) {
             return () => clearInterval(interval); // Clean up interval on component unmount
         }, [seconds]); // Re-run useEffect when `isActive` or `seconds` changes
 
-        const resendOtp = (e) => {
+        const resendOtp = () => {
             setSeconds(30);
             isActive = true;
         }
@@ -64,7 +64,7 @@ export function OTPView({onSubmit}) {
                     key={index}
                     ref={inputRefs[index]}
                     type="number"
-                    max={'9'}
+                    max={"9"}
                     onChange={(e) => handleChange(e, index)}
                     onWheel={(e) => e.currentTarget.blur()} // Disable spinner
                     className="w-14 h-14 focus:border-black border-2 text-center rounded-lg text-2xl font-bold"

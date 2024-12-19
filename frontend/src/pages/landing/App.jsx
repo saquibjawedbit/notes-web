@@ -36,7 +36,7 @@ function App() {
       <h1 className='text-5xl sm:text-6xl text-black font-bold'>SchoolBuddy<br />The happier workspace</h1>
       <h2 className='text-2xl sm:text-2xl text-black font-semibold'>Learn, Collabrate, and Excel, with our solution.</h2>
       <div className='flex flex-col lg:flex-row gap-6 mt-6 items-center lg:justify-start'>
-        <CallToActionButton title={"Get Started"}/>
+        <CallToActionButton title={"Get Started"} to={'/notes'}/>
         <button className='bg-white text-black border-2 border-black  font-bold px-12 py-4 rounded-3xl hover:bg-gray-100 transition duration-300 hover:scale-105 flex-1 max-w-48'>
           Explore
         </button>
@@ -60,7 +60,7 @@ function App() {
           <h2 className='text-3xl text-black font-bold'>
             High Quality Contents
           </h2>
-          <p className='text-slate-600 mb-auto'>"Welcome to your ultimate destination for mastering physics and chemistry! Our channel is dedicated to providing high-quality, easy-to-understand tuition for students of all levels. Dive into the fascinating worlds of physics and chemistry as we break down complex concepts into simple, engaging explanations. Whether you're preparing for exams, tackling tricky problems, or simply nurturing your curiosity, our concise yet comprehensive videos are designed to help you excel. Join us on this educational journey to explore the mysteries of the universe, from atomic structures to the laws of motion, with clear visuals and expert guidance!"</p>
+          <p className='text-slate-600 mb-auto'>Welcome to your ultimate destination for mastering physics and chemistry! Our channel is dedicated to providing high-quality, easy-to-understand tuition for students of all levels. Dive into the fascinating worlds of physics and chemistry as we break down complex concepts into simple, engaging explanations. Whether you are preparing for exams, tackling tricky problems, or simply nurturing your curiosity, our concise yet comprehensive videos are designed to help you excel. Join us on this educational journey to explore the mysteries of the universe, from atomic structures to the laws of motion, with clear visuals and expert guidance!</p>
           <div className="flex w-48 place-self-center lg:place-self-start">
             <CallToActionButton title={"Learn"}/>
           </div>

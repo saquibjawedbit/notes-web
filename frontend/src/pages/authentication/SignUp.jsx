@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { OTPView } from ".//common/OTPView";
 import { Link } from "react-router";
+import axios from "axios";
 
 export function SignUp() {
     const [otpScreen, setOtpScreen] = useState(false);
     const [credential, setCredential] = useState({
-        email: "",
+        emailId: "",
         password: "",
         confirmPassword: "",
     });
@@ -19,15 +20,23 @@ export function SignUp() {
         }));
     };
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
         if (credential.password !== credential.confirmPassword) {
             setError("Password and Confirm Password should be the same");
             return;
         }
 
-        setError("");
-        setOtpScreen(true);
+        try {
+            const response = await axios.post("/api/v1/users/register", credential);
+            console.log(response);
+            setError("");
+            setOtpScreen(true);
+        }
+        catch (error) {
+            console.log(error);
+            setError(error.message);
+        }
     };
 
     return (
@@ -41,16 +50,16 @@ export function SignUp() {
                     >
                         <div>
                             <label
-                                htmlFor="email"
+                                htmlFor="emailId"
                                 className="block text-sm font-medium text-gray-700"
                             >
                                 Email
                             </label>
                             <input
                                 type="email"
-                                id="email"
+                                id="emailId"
                                 placeholder="Email"
-                                value={credential.email}
+                                value={credential.emailId}
                                 onChange={handleChange}
                                 required
                                 className="p-2 border border-gray-300 rounded-lg w-56 sm:w-80 text-sm md:text-lg placeholder:text-sm"

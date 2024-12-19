@@ -1,18 +1,35 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import { OTPView } from "./common/OTPView";
+import axios from "axios";
 
 export function Login() {
-    const credential = {
-        email: "",
+    const [credential, setCredential] = useState({
+        emailId: "",
         password: "",
-    }
+        confirmPassword: "",
+    });
+
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+        setCredential((prev) => ({
+            ...prev,
+            [id]: value,
+        }));
+    };
 
     const [OtpScreen, setOtpScreen] = useState(false);
 
-    function onSubmit(e) {
+    async function onSubmit(e) {
         e.preventDefault();
-        setOtpScreen(true);
+        try {
+            const response = await axios.post("/api/v1/users/login", credential);
+            console.log(response);
+            setOtpScreen(true);
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 
 
@@ -23,16 +40,15 @@ export function Login() {
         <div>
             <form className="flex flex-col items-center gap-2" onSubmit={onSubmit}>
                 <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="emailId" className="block text-sm font-medium text-gray-700">
                         Email
                     </label>
                     <input
                         type="email"
-                        id="email"
+                        id="emailId"
                         placeholder="Email"
-                        onChange={(e) => {
-                            credential.email = e.target.value;
-                        }}
+                        onChange={handleChange}
+                        value={credential.emailId}
                         required
                         className="p-2 border border-gray-300 rounded-lg w-56 sm:w-80 text-sm md:text-lg placeholder:text-sm"
                     />
@@ -45,10 +61,9 @@ export function Login() {
                         type="password"
                         id="password"
                         placeholder="Password"
+                        value={credential.password}
                         minLength={6}
-                        onChange={(e) => {
-                            credential.password = e.target.value
-                        }}
+                        onChange={handleChange}
                         required
                         className="w-56 sm:w-80 p-2 border border-gray-300 rounded-lg text-sm md:text-lg placeholder:text-sm"
                     />

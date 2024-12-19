@@ -1,11 +1,33 @@
-import React, { useState } from "react";
-
-
-
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function Home() {
     const [isOpen, setIsOpen] = useState(false);
     const [category, setCategory] = useState("JEE");
+    const navigate = useNavigate();
+    
+    let user;
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Replace with your API endpoint
+                const response = await axios.get('/api/v1/users/me');
+
+                user = response.response;
+
+                console.log("User:", user);
+                
+            } catch {
+                navigate('/login');
+            }
+        };
+    
+        fetchData();
+    }, []);
+
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -22,8 +44,8 @@ export function Home() {
         toggleDropdown();
     }
 
-    const subjects = { 
-        XII :[
+    const subjects = {
+        XII: [
             {
                 name: "Chemistry",
                 chapter: 12,
@@ -41,101 +63,101 @@ export function Home() {
             },
         ],
 
-        JEE :
-        [
-            {
-                name: "Chemistry",
-                chapter: 12,
-                icon: "./chemistry.svg",
-            },
-            {
-                name: "Physics",
-                chapter: 10,
-                icon: "./physics.svg",
-            },
-            {
-                name: "Math",
-                chapter: 8,
-                icon: './math.svg',
-            },
-        ],
-        NEET :
-        [
-            {
-                name: "Chemistry",
-                chapter: 12,
-                icon: "./chemistry.svg",
-            },
-            {
-                name: "Physics",
-                chapter: 10,
-                icon: "./physics.svg",
-            },
-            {
-                name: "Math",
-                chapter: 8,
-                icon: './math.svg',
-            },
-            {
-                name: "Biology",
-                chapter: 8,
-                icon: './biology.svg',
-            },
-        ],
-        X :
-        [
-            {
-                name: "Chemistry",
-                chapter: 12,
-                icon: "./chemistry.svg",
-            },
-            {
-                name: "Physics",
-                chapter: 10,
-                icon: "./physics.svg",
-            },
-            {
-                name: "Math",
-                chapter: 8,
-                icon: './math.svg',
-            },
-        ],
-        XI :
-        [
-            {
-                name: "Chemistry",
-                chapter: 12,
-                icon: "./chemistry.svg",
-            },
-            {
-                name: "Physics",
-                chapter: 10,
-                icon: "./physics.svg",
-            },
-            {
-                name: "Math",
-                chapter: 8,
-                icon: './math.svg',
-            },
-        ],
-        IX :
-        [
-            {
-                name: "Chemistry",
-                chapter: 12,
-                icon: "./chemistry.svg",
-            },
-            {
-                name: "Physics",
-                chapter: 10,
-                icon: "./physics.svg",
-            },
-            {
-                name: "Math",
-                chapter: 8,
-                icon: './math.svg',
-            },
-        ],
+        JEE:
+            [
+                {
+                    name: "Chemistry",
+                    chapter: 12,
+                    icon: "./chemistry.svg",
+                },
+                {
+                    name: "Physics",
+                    chapter: 10,
+                    icon: "./physics.svg",
+                },
+                {
+                    name: "Math",
+                    chapter: 8,
+                    icon: './math.svg',
+                },
+            ],
+        NEET:
+            [
+                {
+                    name: "Chemistry",
+                    chapter: 12,
+                    icon: "./chemistry.svg",
+                },
+                {
+                    name: "Physics",
+                    chapter: 10,
+                    icon: "./physics.svg",
+                },
+                {
+                    name: "Math",
+                    chapter: 8,
+                    icon: './math.svg',
+                },
+                {
+                    name: "Biology",
+                    chapter: 8,
+                    icon: './biology.svg',
+                },
+            ],
+        X:
+            [
+                {
+                    name: "Chemistry",
+                    chapter: 12,
+                    icon: "./chemistry.svg",
+                },
+                {
+                    name: "Physics",
+                    chapter: 10,
+                    icon: "./physics.svg",
+                },
+                {
+                    name: "Math",
+                    chapter: 8,
+                    icon: './math.svg',
+                },
+            ],
+        XI:
+            [
+                {
+                    name: "Chemistry",
+                    chapter: 12,
+                    icon: "./chemistry.svg",
+                },
+                {
+                    name: "Physics",
+                    chapter: 10,
+                    icon: "./physics.svg",
+                },
+                {
+                    name: "Math",
+                    chapter: 8,
+                    icon: './math.svg',
+                },
+            ],
+        IX:
+            [
+                {
+                    name: "Chemistry",
+                    chapter: 12,
+                    icon: "./chemistry.svg",
+                },
+                {
+                    name: "Physics",
+                    chapter: 10,
+                    icon: "./physics.svg",
+                },
+                {
+                    name: "Math",
+                    chapter: 8,
+                    icon: './math.svg',
+                },
+            ],
 
     };
 
@@ -209,16 +231,16 @@ export function Home() {
         </div>;
     }
 
-    function Subject({title, chapter, icon}) {
+    function Subject({ title, chapter, icon }) {
         return (<div className="flex flex-col items-center pt-4 gap-4 shadow-lg w-48 h-80 hover:shadow-2xl transition duration-300 rounded-lg">
-                    <img src={icon} className="w-40 h-40" alt="" />
-                    <h3 className="text-2xl font-semibold">{title}</h3>
-                    <p className="text-lg text-slate-600">{chapter} Chapters</p>
-                </div>);
+            <img src={icon} className="w-40 h-40" alt="" />
+            <h3 className="text-2xl font-semibold">{title}</h3>
+            <p className="text-lg text-slate-600">{chapter} Chapters</p>
+        </div>);
     }
 
     return <div className='bg-slate-100 pb-12'
-        >   <div className="flex justify-between px-8 md:px-16 py-4">
+    >   <div className="flex justify-between px-8 md:px-16 py-4">
             <div className="flex flex-col gap-4">
                 <h1 className="font-bold text-2xl text-black">Study Materials</h1>
                 <h3 className="text-lg text-slate-900">Select Your Subject and Start Learning</h3>
@@ -227,12 +249,12 @@ export function Home() {
         </div>
         <div className="mt-12 flex items-start justify-center min-w-screen">
             <div className="flex bg-white h-fit w-3/4 py-8 px-8 justify-around flex-wrap gap-4">
-                {category =="JEE" && subjects.JEE.map((element) => <Subject key={element.chapter} title={element.name} chapter={element.chapter} icon={element.icon}/>)}
-                {category =="NEET" && subjects.NEET.map((element) => <Subject key={element.chapter} title={element.name} chapter={element.chapter} icon={element.icon}/>)}
-                {category =="X" && subjects.X.map((element) => <Subject key={element.chapter} title={element.name} chapter={element.chapter} icon={element.icon}/>)}
-                {category =="XI" && subjects.XI.map((element) => <Subject key={element.chapter} title={element.name} chapter={element.chapter} icon={element.icon}/>)}
-                {category =="XII" && subjects.XII.map((element) => <Subject key={element.chapter} title={element.name} chapter={element.chapter} icon={element.icon}/>)}
-                {category =="IX" && subjects.IX.map((element) => <Subject key={element.chapter} title={element.name} chapter={element.chapter} icon={element.icon}/>)}
+                {category == "JEE" && subjects.JEE.map((element) => <Subject key={element.chapter} title={element.name} chapter={element.chapter} icon={element.icon} />)}
+                {category == "NEET" && subjects.NEET.map((element) => <Subject key={element.chapter} title={element.name} chapter={element.chapter} icon={element.icon} />)}
+                {category == "X" && subjects.X.map((element) => <Subject key={element.chapter} title={element.name} chapter={element.chapter} icon={element.icon} />)}
+                {category == "XI" && subjects.XI.map((element) => <Subject key={element.chapter} title={element.name} chapter={element.chapter} icon={element.icon} />)}
+                {category == "XII" && subjects.XII.map((element) => <Subject key={element.chapter} title={element.name} chapter={element.chapter} icon={element.icon} />)}
+                {category == "IX" && subjects.IX.map((element) => <Subject key={element.chapter} title={element.name} chapter={element.chapter} icon={element.icon} />)}
             </div>
         </div>
     </div>
