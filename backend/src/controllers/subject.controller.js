@@ -14,10 +14,20 @@ const getSubject = asyncHandler(async (req, res) => {
         throw new ApiError('Grade is Required');
     }
 
-    //Fetch 20 Subjects by finding Grade
-    const subjects = await Subject.find({ grade }) // Find subjects where grade matches
-    .select("-chapters")
-    .limit(20);
+    // Fetch 20 Subjects by finding Grade
+    const subjects = await Subject.aggregate([
+        { $match: { grade } },
+        { 
+            $project: { 
+                chaptersCount: { $size: "$chapters" },
+                _id: 1,
+                name: 1,
+                thumbnail: 1,
+                grade: 1
+            } 
+        },
+        { $limit: 20 }
+    ]);
 
     // No Subject with this name exists
     if(subjects.length == 0) {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export function Home() {
     const [isOpen, setIsOpen] = useState(false);
@@ -19,13 +19,13 @@ export function Home() {
                 const response = await axios.get('/api/v1/users/me');
                 const user = response.data.data;
 
-
                 if(user.class) {
                     setCategory(user.class);
                 }
 
 
                 setUser(user);
+                setLoading(false);
 
             } catch (error) {
                 if (error.response.data.message === 'jwt expired') {
@@ -33,6 +33,8 @@ export function Home() {
                         await axios.post('/api/v1/users/refresh-token');
                         const response = await axios.get('/api/v1/users/me');
                         user = response.response;
+                        setUser(user);
+                        setLoading(false);
                     } catch (error) {
                         navigate('/login');
                     }
@@ -47,7 +49,17 @@ export function Home() {
     }, []);
 
     useEffect(() => {
-       
+       const loadData = async () => {
+            try {
+                const respone = await axios.get(`/api/v1/subjects/${category}`);
+                const subjects = respone.data.data;
+                setSubjects(subjects);
+            }
+            catch(e) {
+                console.log(e);
+            }
+       };
+       loadData();
     }, [category]);
 
 
@@ -71,7 +83,7 @@ export function Home() {
             <div className="relative inline-block">
                 {/* Button to open/close the dropdown */}
                 <button
-                    onClick={user !==null && toggleDropdown}
+                    onClick={toggleDropdown}
                     className="flex justify-between bg-black text-white font-semibold px-4 py-2 rounded w-24"
                 >
                     {category}
@@ -92,7 +104,7 @@ export function Home() {
                 </button>
 
                 {/* Dropdown content */}
-                {isOpen && !loading && (user.class) (
+                {(isOpen && !loading && (user.class)) && (
                     <div className="absolute right-0  mt-2 w-48 bg-white shadow-md rounded">
                         <button
                             onClick={() => (onDropDownClick(0))}
@@ -137,26 +149,31 @@ export function Home() {
     }
 
     function Subject({ title, chapter, icon }) {
-        return (<div className="flex flex-col items-center pt-4 gap-4 shadow-lg w-56 h-80 hover:shadow-2xl transition duration-300 rounded-lg">
+        return (<Link to = {title} className="flex flex-col items-center pt-4 gap-4 shadow-lg w-56 h-80 hover:shadow-2xl transition duration-300 rounded-lg">
             <img src={icon} className="w-40 h-40" alt="" />
             <h3 className="text-2xl font-semibold">{title}</h3>
             <p className="text-lg text-slate-600">{chapter} Chapters</p>
-        </div>);
+        </Link>);
     }
 
-    const onLogout = async () => {
+    const updateClass = async () => {
         try {
-            await axios.post('/api/v1/users/logout');
-            navigate('/login');
-        } catch (error) {
-            console.log(error);
+            await axios
+              .patch('/api/v1/users/update-account',{
+                "class" : category,
+              });
+            setUser((prev) => ({...prev, class: category}));
         }
-    };
+        catch(e) {
+            console.log(e);
+        }
+    }   
+
 
     function AskSubject() {
         return <div className="fixed flex justify-center items-center inset-0 h-screen bg-black bg-opacity-90">
-            <div className="flex flex-col justify-center items-center bg-white px-24 py-8 rounded-xl gap-4">
-                <h2 className="text-2xl font-bold">Please select your Class</h2>
+            <div className="flex flex-col justify-center items-center bg-white px-4 md:px-24 py-8 rounded-xl gap-4">
+                <h2 className="text-xl md:text-2xl font-bold">Please select your Class</h2>
                 <div className="flex">
                     <div className="relative inline-block">
                         {/* Button to open/close the dropdown */}
@@ -224,6 +241,7 @@ export function Home() {
                         )}
                     </div>
                 </div>
+                <button className="bg-black w-full h-12 text-white rounded-lg font-bold" onClick={updateClass}> Submit</button>
             </div>
         </div>
     }
@@ -236,10 +254,10 @@ export function Home() {
             </div>
             <DropDownButton />
         </div>
-        {!loading && user.class === null} <AskSubject />
+        {!loading && !(user.class) && <AskSubject />}
         <div className="mt-12 flex items-start justify-center min-w-screen">
             <div className="flex bg-white h-fit max-w-screen-lg md:min-w-[720px] min-h-[500px] py-12 px-32 justify-between items-center flex-wrap gap-4 rounded-3xl">
-                {!loading && subjects.map((element) => <Subject key={element.chapter} title={element.name} chapter={element.chapter} icon={element.icon} />)}
+                {!loading && subjects.map((element) => <Subject key={element._id} title={element.name} chapter={element.chaptersCount} icon={element.thumbnail} />)}
             </div>
         </div>
     </div>

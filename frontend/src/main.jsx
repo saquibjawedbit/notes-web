@@ -10,6 +10,7 @@ import { Login } from './pages/authentication/Login.jsx';
 import { Layout as AuthLayout } from './pages/authentication/common/Layout.jsx';
 import {SignUp} from './pages/authentication/SignUp.jsx';
 import {ForgotPassword} from './pages/authentication/ForgotPassword.jsx';
+import Chapters from './pages/chapters/Chapters.jsx';
 
 
 createRoot(document.getElementById('root')).render(
@@ -20,6 +21,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="" element={<App />} />
         <Route path='/about-us' element={<AboutUs />}/>
         <Route path='/notes' element={<Home />}/>
+        <Route path='/notes/:chapter' element={<Chapters/>} />
       </Route>
       <Route path='/' element={<AuthLayout/>}>
         <Route path='login' element={<Login/>}/>
