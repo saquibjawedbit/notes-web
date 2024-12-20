@@ -1,6 +1,6 @@
-import mongoose, { Mongoose, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-const transactionSchema = Mongoose.Schema(
+const transactionSchema = mongoose.Schema(
     {
         noteId: {
             type: Schema.Types.ObjectId,
@@ -42,4 +42,4 @@ const transactionSchema = Mongoose.Schema(
     }
 );
 
-export const Transaction = mongoose.Model("Transaction", transactionSchema);
+export const Transaction = mongoose.model("Transaction", transactionSchema);

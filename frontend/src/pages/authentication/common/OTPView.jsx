@@ -1,14 +1,16 @@
+import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 
-export function OTPView({onSubmit}) {
+export function OTPView({userId, onSubmit}) {
     const otp = ["", "", "", ""];
 
     const inputRefs = Array(otp.length)
         .fill(0)
         .map(() => React.createRef());
 
-    const handleChange = (e, index) => {
+
+    const handleChange = async (e, index) => {
 
         const value = e.target.value;
         if (value.length === 1 && index < otp.length - 1) {
@@ -24,12 +26,21 @@ export function OTPView({onSubmit}) {
         otp[index] = value[0];
 
         if (index == otp.length - 1 && value.length != 0) {
-            onSubmit(otp);
+            onSubmit(otp.join(""));
         }
     }
 
+    const resendOtp = async () => {
+        try {
+            await axios.post("/api/v1/users/resend-otp", { userId: userId });
+        }
+        catch (error) {
+            console.log(error.response.data.message);
+        }
+    };
 
-    function Timer() {
+
+    function Timer({onClick}) {
         const [seconds, setSeconds] = useState(30); // Set initial time (30 seconds)
         let isActive = true; // Track if the timer is running
         
@@ -50,6 +61,9 @@ export function OTPView({onSubmit}) {
         const resendOtp = () => {
             setSeconds(30);
             isActive = true;
+            if(isActive)    {
+                onClick();
+            }
         }
 
 
@@ -72,7 +86,7 @@ export function OTPView({onSubmit}) {
                 )}
               
             </form>
-            <Timer />
+            <Timer onClick={resendOtp}/>
         </div>
     );
 

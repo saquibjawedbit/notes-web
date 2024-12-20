@@ -11,6 +11,7 @@ import { Layout as AuthLayout } from './pages/authentication/common/Layout.jsx';
 import {SignUp} from './pages/authentication/SignUp.jsx';
 import {ForgotPassword} from './pages/authentication/ForgotPassword.jsx';
 
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>

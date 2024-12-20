@@ -3,9 +3,11 @@ import { Footer } from "./components/footer/Footer";
 import { Outlet } from "react-router";
 
 export function Layout() {
-    return <>
+    return <div className="min-h-screen flex flex-col justify-between">
         <NavBar/>
-            <Outlet />
+        <div className="flex-grow">
+                <Outlet />
+            </div>
         <Footer/>
-    </>;
+    </div>;
 }

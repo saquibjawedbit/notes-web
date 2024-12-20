@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { OTPView } from ".//common/OTPView";
 import { Link } from "react-router";
 import axios from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export function SignUp() {
+    const location = useLocation();
+
     const [otpScreen, setOtpScreen] = useState(false);
     const [credential, setCredential] = useState({
         emailId: "",
@@ -11,6 +14,9 @@ export function SignUp() {
         confirmPassword: "",
     });
     const [error, setError] = useState("");
+    const [userId, setUserId] = useState(null);
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -19,6 +25,28 @@ export function SignUp() {
             [id]: value,
         }));
     };
+
+    useEffect(()=>{
+        const sendOTP = async () => {
+            try {
+                await axios.post("/api/v1/users/resend-otp", { userId: location.state.userId });
+            }
+            catch (error) {
+                console.log(error.response);
+                setError(error.response.data.message);
+            }
+        };
+
+        if(location.state) {
+
+            console.log(location.state);
+        
+            setUserId(location.state.userId);
+            setOtpScreen(location.state.otpScreen);
+
+            sendOTP();
+        }
+    }, []);
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -29,13 +57,28 @@ export function SignUp() {
 
         try {
             const response = await axios.post("/api/v1/users/register", credential);
-            console.log(response);
+            const data = response.data.data.user._id;
+            setUserId(data);
             setError("");
             setOtpScreen(true);
         }
         catch (error) {
+            setError(error.response.data.message);
+        }
+    };
+
+    const onOTPSubmit = async (otp) => {
+        try {
+            const otpDoc = {
+                otp: otp,
+                userId: userId,
+            };
+
+            await axios.post("/api/v1/users/verify", otpDoc);
+            navigate("/notes");
+        }
+        catch (error) {
             console.log(error);
-            setError(error.message);
         }
     };
 
@@ -101,7 +144,7 @@ export function SignUp() {
                                 className="w-56 sm:w-80 p-2 border border-gray-300 rounded-lg text-sm md:text-lg placeholder:text-sm"
                             />
                         </div>
-                        
+
 
 
                         {error && (
@@ -126,7 +169,7 @@ export function SignUp() {
                     </div>
                 </div>
             ) : (
-                <OTPView />
+                <OTPView userId={userId} onSubmit={onOTPSubmit}/>
             )}
         </>
     );

@@ -9,7 +9,6 @@ const noteScheme = new mongoose.Schema(
         },
         thumbnail: {
             type: String, //Cloudinary URL
-            required: true,
         },
         title: {
             type: String,
@@ -17,22 +16,16 @@ const noteScheme = new mongoose.Schema(
         },
         description: {
             type: String,
-            required: true,
         },
-        class: [
-            {
-                type: String,
-                enum: ["IX", "X", "XI", "XII", "JEE", "NEET"],
-                required: true,
-            }
-        ],
-        Subject: {
-            type: String,
-            enum: ["MATH", "PHYSICS", "CHEMISTRY", "BIOLOGY"],
-        },
-        purchased: {
+        price: {
             type: Number,
             default: 0,
+            required: true,
+        },
+        purchasedBy: {
+            type: [mongoose.Schema.Types.ObjectId], //Array of ObjectIds referencing Users
+            ref: "User",
+            default: [],
         },
         isPublished: {
             type: Boolean, 

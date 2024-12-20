@@ -1,17 +1,22 @@
 import React, { cloneElement, useState } from "react";
 import { OTPView } from "./common/OTPView";
 import { Link } from "react-router";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function ForgotPassword() {
     const [OtpScreen, setOtpScreen] = useState(false);
     const [error, setError] = useState("");
     const [reset, setReset] = useState(false);
+    const [userId, setUserId] = useState("");
 
     const [credential, setCredential] = useState({
         email: "",
         password: "",
         confirmPassword: "",
     });
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -21,22 +26,49 @@ export function ForgotPassword() {
         }));
     };
 
-    const onSubmit = (e) => {
+    
+
+    const onSubmit = async (e) => {
         e.preventDefault();
         if (credential.password !== credential.confirmPassword) {
             setError("Password and Confirm Password should be the same");
             return;
         }
 
-        if(!reset)
-            setOtpScreen(true);
-        else 
-            setError("");
+        try {
+            if(!reset) {
+                const response = await axios
+                    .post("/api/v1/users/forget-password", { emailId: credential.email });
+                let userId = response.data.data.id;
+                setUserId(userId);
+                setOtpScreen(true);
+                setError("");
+            
+            }
+            else {
+                const response = await axios
+                      .post("/api/v1/users/reset-password", { userId, newPassword: credential.password });
+                navigate('/login');   
+            }
+        }
+        catch(e) {
+            console.log(e.response);
+            setError(e.response.data.message);
+        }
     };
 
-    const onOTPSubmit = (otp) => {
-        setOtpScreen(false);
-        setReset(true);
+    const onOTPSubmit = async (otp) => {
+        try {
+            console.log(userId, otp);
+            const response = await axios
+                      .post("/api/v1/users/verify", {userId, otp});
+            setOtpScreen(false);
+            setReset(true);
+        }
+        catch(e) {
+            console.log(e.response);
+            setError(e.response.data.message);
+        }
     }
 
     return <>

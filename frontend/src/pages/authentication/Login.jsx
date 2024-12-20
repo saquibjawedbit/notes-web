@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom';
-import { OTPView } from "./common/OTPView";
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 
 export function Login() {
@@ -9,6 +8,9 @@ export function Login() {
         password: "",
         confirmPassword: "",
     });
+    const [error, setError] = useState("");
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -18,25 +20,26 @@ export function Login() {
         }));
     };
 
-    const [OtpScreen, setOtpScreen] = useState(false);
-
     async function onSubmit(e) {
         e.preventDefault();
         try {
-            const response = await axios.post("/api/v1/users/login", credential);
-            console.log(response);
-            setOtpScreen(true);
+            const respone  = await axios.post("/api/v1/users/login", credential);
+            const user = respone.data.data.user;
+            if(user.verified === false) {
+                navigate('/signup', {state: {userId: user._id, otpScreen: true}});
+            }
+            else {
+                navigate('/notes');
+            }      
         }
         catch (error) {
-            console.log(error);
+            setError(error.response.data.message);
         }
     }
 
 
     return <>
         <h2 className="text-2xl md:text-3xl font-bold">Login</h2>
-        {
-            (!OtpScreen) ? 
         <div>
             <form className="flex flex-col items-center gap-2" onSubmit={onSubmit}>
                 <div>
@@ -71,13 +74,15 @@ export function Login() {
                 <div className="self-end text-xs mb-2">
                     <Link to='/forgotPassword'>Forgot Password ?</Link>
                 </div>
+                {error && (
+                            <p className="text-red-500 text-sm mt-2">{error}</p>
+                        )}
                 <button type="submit" className="text-xl text-white bg-black rounded-lg w-full py-2"> Login </button>
             </form>
             <div className="text-xs md:text-sm mt-2">
                 <p>Don't have an account.<Link className="text-blue-600" to='/signup'>  Create one ?</Link></p>
             </div>
-        </div> : <OTPView/>
-        }
+        </div>
 
     </>;
 
