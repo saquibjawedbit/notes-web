@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route } from 'react-router';
+import { BrowserRouter, Routes, Route, Switch } from 'react-router';
 import './index.css'
 import App from './pages/landing/App.jsx'
 import { Layout } from './Layout.jsx';
