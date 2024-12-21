@@ -13,10 +13,18 @@ import {ForgotPassword} from './pages/authentication/ForgotPassword.jsx';
 import Chapters from './pages/chapters/Chapters.jsx';
 import { disableReactDevTools } from '@fvilers/disable-react-devtools';
 
+const apiUrl = import.meta.env.MODE === 'production'
+  ? 'https://notes-web-api.vercel.app/' 
+  : '/api';
 
-if (process.env.NODE_ENV === 'production') {
+const api = axios.create({
+  baseURL: apiUrl,
+});
+
+
+if (import.meta.env.MODE === 'production' === 'production') {
   // Safely remove React DevTools in production
-  disableReactDevTools();
+   disableReactDevTools();
 }
 
 
