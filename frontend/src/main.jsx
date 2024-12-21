@@ -12,6 +12,7 @@ import {SignUp} from './pages/authentication/SignUp.jsx';
 import {ForgotPassword} from './pages/authentication/ForgotPassword.jsx';
 import Chapters from './pages/chapters/Chapters.jsx';
 import { disableReactDevTools } from '@fvilers/disable-react-devtools';
+import axios from 'axios';
 
 const apiUrl = import.meta.env.MODE === 'production'
   ? 'https://notes-web-api.vercel.app/' 
