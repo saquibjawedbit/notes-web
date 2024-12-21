@@ -15,7 +15,7 @@ import { disableReactDevTools } from '@fvilers/disable-react-devtools';
 import axios from 'axios';
 
 const apiUrl = import.meta.env.MODE === 'production'
-  ? 'https://notes-web-api.vercel.app/' 
+  ? 'https://notes-web-api.vercel.app/api' 
   : '/api';
 
 const api = axios.create({
