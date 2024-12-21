@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route, Switch } from 'react-router';
+import { BrowserRouter, Routes, Route } from 'react-router';
 import './index.css'
 import App from './pages/landing/App.jsx'
 import { Layout } from './Layout.jsx';
@@ -27,7 +27,6 @@ if (import.meta.env.MODE === 'production') {
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <Switch>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="" element={<App />} />
@@ -41,7 +40,6 @@ createRoot(document.getElementById('root')).render(
             <Route path='forgotPassword' element={<ForgotPassword />} />
           </Route>
         </Routes>
-      </Switch>
     </BrowserRouter>
   </StrictMode>,
 )
