@@ -11,13 +11,12 @@ import { Layout as AuthLayout } from './pages/authentication/common/Layout.jsx';
 import {SignUp} from './pages/authentication/SignUp.jsx';
 import {ForgotPassword} from './pages/authentication/ForgotPassword.jsx';
 import Chapters from './pages/chapters/Chapters.jsx';
+import { disableReactDevTools } from '@fvilers/disable-react-devtools';
 
 
 if (process.env.NODE_ENV === 'production') {
   // Safely remove React DevTools in production
-  if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
-    delete window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
-  }
+  disableReactDevTools();
 }
 
 
