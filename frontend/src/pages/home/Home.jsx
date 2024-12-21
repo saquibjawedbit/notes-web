@@ -32,7 +32,7 @@ export function Home() {
                     try {
                         await axios.post('/api/v1/users/refresh-token');
                         const response = await axios.get('/api/v1/users/me');
-                        user = response.response;
+                        const user = response.data.data;
                         setUser(user);
                         setLoading(false);
                     } catch (error) {
