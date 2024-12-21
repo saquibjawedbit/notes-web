@@ -32,7 +32,7 @@ export function OTPView({userId, onSubmit}) {
 
     const resendOtp = async () => {
         try {
-            await axios.post("/api/v1/users/resend-otp", { userId: userId });
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/resend-otp`, { userId: userId });
         }
         catch (error) {
             console.log(error.response.data.message);

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import axios from  'axios';
 
 export function Home() {
     const [isOpen, setIsOpen] = useState(false);
@@ -15,8 +15,9 @@ export function Home() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Replace with your API endpoint
-                const response = await axios.get('/api/v1/users/me');
+               
+                // Replace with your axios endpoint
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/users/me`);
                 const user = response.data.data;
 
                 if(user.class) {
@@ -30,8 +31,8 @@ export function Home() {
             } catch (error) {
                 if (error.response.data.message === 'jwt expired') {
                     try {
-                        await axios.post('/api/v1/users/refresh-token');
-                        const response = await axios.get('/api/v1/users/me');
+                        await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/refresh-token`);
+                        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/users/me`);
                         const user = response.data.data;
                         setUser(user);
                         setLoading(false);
@@ -51,7 +52,7 @@ export function Home() {
     useEffect(() => {
        const loadData = async () => {
             try {
-                const respone = await axios.get(`/api/v1/subjects/${category}`);
+                const respone = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/subjects/${category}`);
                 const subjects = respone.data.data;
                 setSubjects(subjects);
             }
@@ -159,7 +160,7 @@ export function Home() {
     const updateClass = async () => {
         try {
             await axios
-              .patch('/api/v1/users/update-account',{
+              .patch(`${import.meta.env.VITE_API_URL}/api/v1/users/update-account`,{
                 "class" : category,
               });
             setUser((prev) => ({...prev, class: category}));

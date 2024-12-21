@@ -29,7 +29,7 @@ export function SignUp() {
     useEffect(()=>{
         const sendOTP = async () => {
             try {
-                await axios.post("/api/v1/users/resend-otp", { userId: location.state.userId });
+                await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/resend-otp`, { userId: location.state.userId });
             }
             catch (error) {
                 console.log(error.response);
@@ -56,7 +56,7 @@ export function SignUp() {
         }
 
         try {
-            const response = await axios.post("/api/v1/users/register", credential);
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/register`, credential);
             const data = response.data.data.user._id;
             setUserId(data);
             setError("");
@@ -74,7 +74,7 @@ export function SignUp() {
                 userId: userId,
             };
 
-            await axios.post("/api/v1/users/verify", otpDoc);
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/verify`, otpDoc);
             navigate("/notes");
         }
         catch (error) {

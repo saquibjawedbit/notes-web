@@ -3,7 +3,7 @@ const allowedOrigins = (process.env.NODE_ENV === "dev")
   : [process.env.CORS_ORIGIN_1, process.env.CORS_ORIGIN_2, process.env.CORS_ORIGIN_3]; 
 
 const corsOption = {
-    origin: !(process.env.NODE_ENV === "production") 
+    origin: (process.env.NODE_ENV === "dev") 
       ? '*' 
       : (origin, callback) => {
           if (allowedOrigins.includes(origin)) {

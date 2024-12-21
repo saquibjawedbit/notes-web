@@ -38,7 +38,7 @@ export function ForgotPassword() {
         try {
             if(!reset) {
                 const response = await axios
-                    .post("/api/v1/users/forget-password", { emailId: credential.email });
+                    .post(`${import.meta.env.VITE_API_URL}/api/v1/users/forget-password`, { emailId: credential.email });
                 let userId = response.data.data.id;
                 setUserId(userId);
                 setOtpScreen(true);
@@ -47,7 +47,7 @@ export function ForgotPassword() {
             }
             else {
                 const response = await axios
-                      .post("/api/v1/users/reset-password", { userId, newPassword: credential.password });
+                      .post(`${import.meta.env.VITE_API_URL}/api/v1/users/reset-password`, { userId, newPassword: credential.password });
                 navigate('/login');   
             }
         }
@@ -61,7 +61,7 @@ export function ForgotPassword() {
         try {
             console.log(userId, otp);
             const response = await axios
-                      .post("/api/v1/users/verify", {userId, otp});
+                      .post(`${import.meta.env.VITE_API_URL}/api/v1/users/verify`, {userId, otp});
             setOtpScreen(false);
             setReset(true);
         }

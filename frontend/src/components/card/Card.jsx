@@ -19,7 +19,8 @@ export function Card({ index, name, len, subject, chapter }) {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const respone = await axios.get(`/api/v1/subjects/${subject}/${chapter}/${name}`);
+                
+                const respone = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/subjects/${subject}/${chapter}/${name}`);
                 const chapterList = respone.data.data;
                 setNoteList(chapterList);
             }

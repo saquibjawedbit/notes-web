@@ -1,7 +1,7 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router'
 import {Card} from '../../components/card/Card.jsx'
+import axios from 'axios';
 
 export default function Chapters() {
   const { subject, chapter } = useParams();
@@ -11,7 +11,7 @@ export default function Chapters() {
   useEffect(()=> {
     const loadData = async () => {
       try {
-        const respone = await axios.get(`/api/v1/subjects/${subject}/${chapter}`);
+        const respone = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/subjects/${subject}/${chapter}`);
         const chapterList = respone.data.data.chapters;
         setChapterList(chapterList);
       }

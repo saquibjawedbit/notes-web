@@ -23,7 +23,7 @@ export function Login() {
     async function onSubmit(e) {
         e.preventDefault();
         try {
-            const respone  = await axios.post("/api/v1/users/login", credential);
+            const respone  = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/login`, credential);
             const user = respone.data.data.user;
             if(user.verified === false) {
                 navigate('/signup', {state: {userId: user._id, otpScreen: true}});

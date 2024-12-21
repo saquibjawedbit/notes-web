@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': "https://notes-web-api.vercel.app/"
+      '/api': "http://localhost:8000"
     },
   },
 })
