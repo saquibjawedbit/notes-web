@@ -69,11 +69,11 @@ export function Card({ index, name, len, subject, chapter }) {
 
                 <div className={`grid transition-all duration-300 ease-in-out ${open ? "grid-rows-[1fr] opacity-100 mt-2" : "grid-rows-[0fr] opacity-0"}`}>
                     <div className="overflow-hidden">
-                        {noteList.map((notes) => (
-                            <div>
+                        {noteList.map((notes) => {
+                            return <div key={notes.note._id}>
                                 {buyView && <ItemVeiw item={notes.note}/>}
                                 <div
-                                    key={notes.note._id} onClick={() => setBuyView(!buyView)}
+                                    onClick={() => setBuyView(!buyView)}
                                     className='bg-white py-4 rounded-xl shadow-lg hover:shadow-xl cursor-pointer px-24 font-semibold mb-2'
                                 >
                                     <div className='flex justify-between'>
@@ -81,10 +81,10 @@ export function Card({ index, name, len, subject, chapter }) {
                                         <img className='w-6 h-6' src={notes.isPurchased ? "/check.svg" : "/lock.svg"} />
                                     </div>
                                 </div>
-                            </div>
+                            </div>}
 
 
-                        ))}
+                        )}
                     </div>
                 </div>
             </div></>

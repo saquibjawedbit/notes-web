@@ -11,14 +11,12 @@ import { Layout as AuthLayout } from './pages/authentication/common/Layout.jsx';
 import {SignUp} from './pages/authentication/SignUp.jsx';
 import {ForgotPassword} from './pages/authentication/ForgotPassword.jsx';
 import Chapters from './pages/chapters/Chapters.jsx';
-import 'dotenv/config'
 
 
-if (process.env.NODE_ENV === 'production') {
+if (import.meta.env.MODE === 'production') {
   // @ts-ignore
   window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = undefined;
 }
-
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
