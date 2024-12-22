@@ -38,7 +38,21 @@ const sendOTP = async (emailId, id) => {
             otp: otpCode,
         });
         await otp.save();
-        await transporter.sendMail(mailOptions);
+        // Send email with detailed error logging
+        try {
+            await transporter.sendMail(mailOptions);
+        } catch (emailError) {
+            console.error("Email Error:", {
+                error: emailError,
+                credentials: {
+                    from: process.env.SMTP_EMAIL,
+                    host: process.env.SMTP_HOST
+                }
+            });
+            throw new ApiError(500, "Failed to send email");
+        }
+
+        return { success: true };
     }
     catch (error) {
         console.log(error);
