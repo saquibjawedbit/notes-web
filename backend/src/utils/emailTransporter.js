@@ -27,15 +27,11 @@ const sendEmail = async (mailOptions) => {
     
 
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.error("Email Error:", error);
-            resolve(false); // or reject(error) if you want to handle errors
-        } else {
-            console.log('Email sent: ' + info.response);
-            resolve(true);
-        }
-    });
+    const sendMessage = async (message) => {
+        await transporter.sendMail(message);
+    }
+
+    await sendMessage(mailOptions);
 };
 
 export default sendEmail;
