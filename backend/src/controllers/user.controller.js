@@ -5,7 +5,7 @@ import ApiResponse from '../utils/ApiResponse.js';
 import jwt from 'jsonwebtoken';
 import {emailTemplate} from '../utils/emailTemplate.js';
 import { Otp } from '../models/otp.model.js';
-import {transporter} from '../utils/emailTransporter.js';
+import sendEmail from '../utils/emailTransporter.js';
 
 
 const generateAccessAndRefreshTokens = async (user) => {
@@ -40,15 +40,10 @@ const sendOTP = async (emailId, id) => {
         await otp.save();
         // Send email with detailed error logging
         try {
-            await transporter.sendMail(mailOptions);
+            await sendEmail(mailOptions);
+        
         } catch (emailError) {
-            console.error("Email Error:", {
-                error: emailError,
-                credentials: {
-                    from: process.env.SMTP_EMAIL,
-                    host: process.env.SMTP_HOST
-                }
-            });
+            console.error("Email Error:", emailError);
             throw new ApiError(500, "Failed to send email");
         }
 
@@ -128,9 +123,9 @@ const loginUser = asyncHandler(async (req, res) => {
     delete userObject.role;
 
    const options = {
-        httpyOnly: true,
+        httpOnly: true,
         secure: true,
-        sameSite: 'None',
+        sameSite: 'None'
    };
 
    return res.status(200)
@@ -192,9 +187,9 @@ const verifyUser = asyncHandler(async (req, res) => {
 
 
     const options = {
-        httpyOnly: true,
+        httpOnly: true,
         secure: true,
-        sameSite: 'None',
+        sameSite: 'None'
    };
 
    return res.status(200)
@@ -226,9 +221,9 @@ const logoutUser = asyncHandler(async (req, res) => {
     );
 
     const options = {
-        httpyOnly: true,
+        httpOnly: true,
         secure: true,
-        sameSite: 'None',
+        sameSite: 'None'
    };
 
    return res.status(200)
@@ -279,7 +274,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         const options = {
             httpOnly: true,
             secure: true,
-            sameSite: 'None',
+            sameSite: 'None'
         };
     
         const {accessToken, refreshToken} = await generateAccessAndRefreshTokens(user);

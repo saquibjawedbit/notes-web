@@ -37,11 +37,11 @@ export function Card({ index, name, len, subject, chapter }) {
     function ItemVeiw({ item }) {
 
         return <div className="fixed inset-0 h-screen justify-center items-center flex bg-white bg-opacity-50">
-            <img src="/back.svg" alt="Back" className="w-8 h-8 fixed top-16 left-24 cursor-pointer" onClick={() => setBuyView(false)}/>
-            <div className="flex flex-row justify-center gap-4 bg-white px-4 py-4 shadow-xl">
+            <img src="/back.svg" alt="Back" className="w-8 h-8 fixed top-4 md:top-16 left-4 md:left-24 cursor-pointer" onClick={() => setBuyView(false)}/>
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4 bg-white px-4 py-4 shadow-xl">
                 <img className="w-56 h-72 object-contain bg-black" src={item.thumbnail} alt="Thumbnail" />
-                <div className="flex flex-col h-72 w-72">
-                    <div className="flex flex-col gap-2 text-wrap overflow-hidden">
+                <div className="flex flex-col h-72 w-56 md:w-72 items-center md:items-start">
+                    <div className="flex flex-col gap-2 text-wrap overflow-hidden w-full">
                         <h1 className="font-bold text-2xl">{item.title} </h1>
                         <h2 className="text-xl font-bold">Rs.{item.price}</h2>
                         <p>{item.description}</p>
@@ -54,15 +54,15 @@ export function Card({ index, name, len, subject, chapter }) {
 
     return (
         <>
-            <div className="w-2/3">
+            <div className="w-4/5 md:w-2/3">
                 <div
                     onClick={() => setOpen(!open)}
-                    className='flex flex-col bg-white items-center justify-start px-24 py-12 rounded-xl shadow-lg cursor-pointer hover:shadow-2xl'
+                    className='flex flex-col bg-white items-center justify-start lg:px-24 py-12 rounded-xl shadow-lg cursor-pointer hover:shadow-2xl'
                 >
                     <div className='flex justify-between w-full px-8 items-center'>
                         <div className="flex flex-col">
-                            <h3 className='font-bold text-3xl'>Module {index + 1}</h3>
-                            <h4 className='font-semibold text-xl'>{name}</h4>
+                            <h3 className='font-bold text-2xl sm:text-3xl'>Module {index + 1}</h3>
+                            <h4 className='font-semibold text-lg sm:text-xl'>{name}</h4>
                         </div>
                         <h3 className='text-xl'>{len}</h3>
                     </div>
@@ -75,9 +75,9 @@ export function Card({ index, name, len, subject, chapter }) {
                                 {buyView && <ItemVeiw item={notes.note}/>}
                                 <div
                                     onClick={() => setBuyView(!buyView)}
-                                    className='bg-white py-4 rounded-xl shadow-lg hover:shadow-xl cursor-pointer px-24 font-semibold mb-2'
+                                    className='bg-white py-4 rounded-xl shadow-lg hover:shadow-xl cursor-pointer lg:px-24 font-semibold mb-2'
                                 >
-                                    <div className='flex justify-between'>
+                                    <div className='flex justify-between px-8'>
                                         <h4>{notes.note.title}</h4>
                                         <img className='w-6 h-6' src={notes.isPurchased ? "/check.svg" : "/lock.svg"} />
                                     </div>

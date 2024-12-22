@@ -19,9 +19,10 @@ import axios from "axios";
 
 if (import.meta.env.MODE === 'production') {
   // Safely remove React DevTools in production
-  axios.defaults.withCredentials = true;
   disableReactDevTools();
 }
+
+axios.defaults.withCredentials = true;
 
 
 createRoot(document.getElementById('root')).render(

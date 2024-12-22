@@ -27,7 +27,7 @@ export default function Chapters() {
 
   return (
     <div className="bg-slate-100 min-h-screen w-full py-8 flex flex-col items-center">
-      <div className='text-5xl font-bold ml-24 self-start'>{chapter} Notes</div>
+      <div className='text-5xl font-bold  ml-6 md:ml-24 self-start'>{chapter} Notes</div>
       <div className="flex flex-col w-full items-center gap-6 mt-12">
         {chapterList.map((ch, index) => <Card key={ch._id} index={index} name={ch.name} len={chapterList.length} subject={subject} chapter={chapter}/>)}
       </div>
