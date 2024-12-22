@@ -65,7 +65,7 @@ const registerUser = asyncHandler( async (req, res) => {
     });
 
     const createdUser = await User.findById(user._id).select(
-        "-password -refreshToken"
+        "-password -refreshToken -role"
     );
 
     if(!createdUser) {
@@ -111,6 +111,7 @@ const loginUser = asyncHandler(async (req, res) => {
     // Remove sensitive fields
     delete userObject.password;
     delete userObject.refreshToken;
+    delete userObject.role;
 
    const options = {
         httpyOnly: true,
@@ -171,7 +172,7 @@ const verifyUser = asyncHandler(async (req, res) => {
         {
             new: true,
         }
-    ).select("-password -refreshToken");
+    ).select("-password -refreshToken -role");
 
     const {accessToken, refreshToken} = await generateAccessAndRefreshTokens(user);
 
