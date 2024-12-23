@@ -1,53 +1,20 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from  'axios';
+import { useAuth } from "../../hooks/useAuth";
 
 export function Home() {
     const [isOpen, setIsOpen] = useState(false);
     const [category, setCategory] = useState("JEE");
     const [subjects, setSubjects] = useState([]);
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const {user, loading} = useAuth();
 
-    const navigate = useNavigate();
-
+    // console.log("value changes");
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-               
-                // Replace with your axios endpoint
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/users/me`);
-                const user = response.data.data;
+        if(user != null) setCategory(user.class);
+    }, [user]);
 
-                if(user.class) {
-                    setCategory(user.class);
-                }
-
-
-                setUser(user);
-                setLoading(false);
-
-            } catch (error) {
-                if (error.response.data.message === 'jwt expired') {
-                    try {
-                        await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/refresh-token`);
-                        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/users/me`);
-                        const user = response.data.data;
-                        setUser(user);
-                        setLoading(false);
-                    } catch (error) {
-                        navigate('/login');
-                    }
-                }
-                else {
-                    navigate('/login');
-                }
-            }
-        };
-
-        fetchData();
-    }, []);
 
     useEffect(() => {
        const loadData = async () => {
@@ -255,10 +222,10 @@ export function Home() {
             </div>
             <DropDownButton />
         </div>
-        {!loading && !(user.class) && <AskSubject />}
+        {!category && <AskSubject />}
         <div className="mt-12 flex items-start justify-center min-w-screen">
             <div className="flex bg-white h-fit max-w-screen-lg md:min-w-[720px] min-h-[500px] py-12 px-32 justify-between items-center flex-wrap gap-4 rounded-3xl">
-                {!loading && subjects.map((element) => <Subject key={element._id} title={element.name} chapter={element.chaptersCount} icon={element.thumbnail} />)}
+                {subjects.length != 0 && subjects.map((element) => <Subject key={element._id} title={element.name} chapter={element.chaptersCount} icon={element.thumbnail} />)}
             </div>
         </div>
     </div>

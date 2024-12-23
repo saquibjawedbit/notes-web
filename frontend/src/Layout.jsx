@@ -7,7 +7,7 @@ export function Layout() {
         <NavBar/>
         <div className="flex-grow">
                 <Outlet />
-            </div>
+        </div>
         <Footer/>
     </div>;
 }

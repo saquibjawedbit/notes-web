@@ -13,6 +13,10 @@ import { ForgotPassword } from './pages/authentication/ForgotPassword.jsx';
 import Chapters from './pages/chapters/Chapters.jsx';
 import { disableReactDevTools } from '@fvilers/disable-react-devtools';
 import axios from "axios";
+import AdminPage from './pages/admin/AdminPage.jsx';
+import AdminLayout from './pages/admin/AdminLayout.jsx';
+import EditPage from './pages/admin/EditPage.jsx';
+import ProtectedRoute from './components/Protected-Route/ProtectedRoute.jsx';
 
 
 
@@ -32,13 +36,19 @@ createRoot(document.getElementById('root')).render(
           <Route path="/" element={<Layout />}>
             <Route path="" element={<App />} />
             <Route path='/about-us' element={<AboutUs />} />
-            <Route path='/notes' element={<Home />} />
-            <Route path='/notes/:subject/:chapter' element={<Chapters />} />
+            <Route path='' element={<ProtectedRoute/>}>
+              <Route path='/notes' element={<Home />} />
+              <Route path='/notes/:subject/:chapter' element={<Chapters />} />
+            </Route>
           </Route>
           <Route path='/' element={<AuthLayout />}>
             <Route path='login' element={<Login />} />
             <Route path='signup' element={<SignUp />} />
             <Route path='forgotPassword' element={<ForgotPassword />} />
+          </Route>
+          <Route path='/admin' element={<AdminLayout/>} >
+            <Route path='create-subject' element={<AdminPage/>}/>
+            <Route path='subjects' element={<EditPage/>}/>
           </Route>
         </Routes>
     </BrowserRouter>
