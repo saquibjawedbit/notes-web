@@ -87,7 +87,6 @@ function AdminPage() {
     };
 
     return (   
-        
             <div className={`w-4/5 p-8 ml-4`}>
                 <h1 className="text-3xl font-bold mb-6">Create Subject</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">

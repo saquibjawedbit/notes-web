@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from  'axios';
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../context/useAuth.jsx";
 
 export function Home() {
     const [isOpen, setIsOpen] = useState(false);

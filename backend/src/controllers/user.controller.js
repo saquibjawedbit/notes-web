@@ -120,7 +120,6 @@ const loginUser = asyncHandler(async (req, res) => {
     // Remove sensitive fields
     delete userObject.password;
     delete userObject.refreshToken;
-    delete userObject.role;
 
    const options = {
         httpOnly: true,
@@ -181,7 +180,7 @@ const verifyUser = asyncHandler(async (req, res) => {
         {
             new: true,
         }
-    ).select("-password -refreshToken -role");
+    ).select("-password -refreshToken");
 
     const {accessToken, refreshToken} = await generateAccessAndRefreshTokens(user);
 

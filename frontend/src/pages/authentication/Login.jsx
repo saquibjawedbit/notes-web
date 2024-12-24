@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
+import { useAuth } from '../../context/useAuth.jsx';
+
 
 export function Login() {
     const [credential, setCredential] = useState({
@@ -9,6 +11,7 @@ export function Login() {
         confirmPassword: "",
     });
     const [error, setError] = useState("");
+    const { user, loading, setUser } = useAuth();
 
     const navigate = useNavigate();
 
@@ -25,6 +28,7 @@ export function Login() {
         try {
             const respone  = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/login`, credential);
             const user = respone.data.data.user;
+            setUser(user);
             if(user.verified === false) {
                 navigate('/signup', {state: {userId: user._id, otpScreen: true}});
             }

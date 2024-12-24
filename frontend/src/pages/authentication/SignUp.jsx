@@ -3,6 +3,7 @@ import { OTPView } from ".//common/OTPView";
 import { Link } from "react-router";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from '../../context/useAuth.jsx';
 
 export function SignUp() {
     const location = useLocation();
@@ -15,8 +16,9 @@ export function SignUp() {
     });
     const [error, setError] = useState("");
     const [userId, setUserId] = useState(null);
-
     const navigate = useNavigate();
+
+    const {setUser} = useAuth();
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -75,6 +77,7 @@ export function SignUp() {
             };
 
             await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/verify`, otpDoc);
+            setUser(user);
             navigate("/notes");
         }
         catch (error) {
