@@ -1,16 +1,29 @@
 import { useState } from 'react';
 import { FiAlignJustify, FiX } from 'react-icons/fi';
-import {Link, NavLink} from 'react-router';
-
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/useAuth.jsx'; // Add this import
 
 export function NavBar() {
-
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated, logout } = useAuth(); // Add this line
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsOpen((isOpen) => !isOpen);
   };
 
+  const handleAuthAction = async () => {
+    if (isAuthenticated) {
+      try {
+        await logout();
+        navigate('/'); // Redirect to home after logout
+      } catch (error) {
+        console.error('Logout failed:', error);
+      }
+    } else {
+      navigate('/notes');
+    }
+  };
 
   return (
     <div>
@@ -36,9 +49,12 @@ export function NavBar() {
             <NavLink to="/contact-us" className='font-semibold hover:font-bold transition duration-600'>Testimonals</NavLink>
             <NavLink to="/about-us" className='font-semibold hover:font-bold transition duration-600'>About Us</NavLink>
 
-            <Link className='bg-black text-white font-bold px-4 py-2 rounded-3xl hover:bg-gray-900 transition duration-300 hover:scale-105'>
-              Buy Notes
-            </Link>
+            <button 
+              onClick={handleAuthAction}
+              className='bg-black text-white font-bold px-4 py-2 rounded-3xl hover:bg-gray-900 transition duration-300 hover:scale-105'
+            >
+              {isAuthenticated ? 'Logout' : 'Buy Notes'}
+            </button>
           </div>
         </div>
       </nav>
@@ -51,9 +67,12 @@ export function NavBar() {
         <Link to="/contact-us" className='font-semibold hover:font-bold transition duration-600'>Testimonals</Link>
         <Link to="/about-us" className='font-semibold hover:font-bold transition duration-600'>About Us</Link>
 
-        <Link className='bg-black text-white font-bold px-4 py-2 rounded-3xl hover:bg-gray-900 transition duration-300 hover:scale-110'>
-          Buy Notes
-        </Link>
+        <button
+          onClick={handleAuthAction}
+          className='bg-black text-white font-bold px-4 py-2 rounded-3xl hover:bg-gray-900 transition duration-300 hover:scale-110'
+        >
+          {isAuthenticated ? 'Logout' : 'Buy Notes'}
+        </button>
       </div>
     </div>
   );

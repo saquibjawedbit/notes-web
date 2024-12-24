@@ -36,11 +36,17 @@ export const AuthProvider = ({ children }) => {
         checkAuth();
     }, []);
 
-    // Logout function
-    const logout = () => {
-        setUser(null);
+    // Update logout function
+    const logout = async () => {
+        try {
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/logout`);
+            setUser(null);
+        } catch (error) {
+            console.error('Logout error:', error);
+            // Still clear the user state even if server logout fails
+            setUser(null);
+        }
     };
-
 
     // Context value to share
     const value = {
