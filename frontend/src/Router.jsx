@@ -13,6 +13,8 @@ import { ForgotPassword } from './pages/authentication/ForgotPassword.jsx';
 import Chapters from './pages/chapters/Chapters.jsx';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 import { useAuth } from './context/useAuth.jsx';
+import EditNote from './pages/admin/EditNote.jsx';
+import CreateNote from './pages/admin/CreateNote.jsx';
 
 
 export default function Router() {
@@ -44,6 +46,8 @@ export default function Router() {
         <Route path='/admin' element={<AdminLayout />} >
               <Route path='create-subject' element={<AdminPage />} />
               <Route path='subjects' element={<EditPage />} />
+              <Route path='edit-note/:noteId' element={<EditNote/>}/>
+              <Route path='create-note/:subjectId/:chapterIndex' element={<CreateNote />}/>
         </Route>
 
       </Routes>

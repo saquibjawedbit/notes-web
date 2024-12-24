@@ -117,7 +117,7 @@ export function Home() {
     }
 
     function Subject({ title, chapter, icon }) {
-        return (<Link to = {`${user.class}/${title}`} className="flex flex-col items-center pt-4 gap-4 shadow-lg w-56 h-80 hover:shadow-2xl transition duration-300 rounded-lg">
+        return (<Link to = {`${category}/${title}`} className="flex flex-col items-center pt-4 gap-4 shadow-lg w-56 h-80 hover:shadow-2xl transition duration-300 rounded-lg">
             <img src={icon} className="w-40 h-40" alt="" />
             <h3 className="text-2xl font-semibold">{title}</h3>
             <p className="text-lg text-slate-600">{chapter} Chapters</p>

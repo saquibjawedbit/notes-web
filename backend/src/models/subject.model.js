@@ -5,11 +5,12 @@ const chapterSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    notes: {
-        type: [mongoose.Schema.Types.ObjectId], // Array of ObjectIds referencing Notes
-        ref: "Note", 
-        default: [],
-    },
+    notes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Note"
+        }
+    ]
 });
 
 const subjectSchema = new mongoose.Schema(
@@ -28,14 +29,21 @@ const subjectSchema = new mongoose.Schema(
             required: true,
             index: true
         },
-        chapters: {
-            type: [chapterSchema], // Array of chapter objects
-            required: true,
-        },
+        chapters: [
+            {
+                type: chapterSchema,
+                required: true
+            }
+        ],
     },
     {
         timestamps: true,
     }
 );
+
+subjectSchema.pre('find', function(next) {
+    this.populate('chapters.notes');
+    next();
+});
 
 export const Subject = mongoose.model("Subject", subjectSchema);
