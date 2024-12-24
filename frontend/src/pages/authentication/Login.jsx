@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { useAuth } from '../../context/useAuth.jsx';
+import ReactLoading from 'react-loading';
 
 
 export function Login() {
@@ -11,6 +12,7 @@ export function Login() {
         confirmPassword: "",
     });
     const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const { user, loading, setUser } = useAuth();
 
     const navigate = useNavigate();
@@ -25,6 +27,9 @@ export function Login() {
 
     async function onSubmit(e) {
         e.preventDefault();
+        setIsLoading(true);
+        setError("");
+        
         try {
             const respone  = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/login`, credential);
             const user = respone.data.data.user;
@@ -38,6 +43,9 @@ export function Login() {
         }
         catch (error) {
             setError(error.response.data.message);
+        }
+        finally {
+            setIsLoading(false);
         }
     }
 
@@ -81,7 +89,22 @@ export function Login() {
                 {error && (
                             <p className="text-red-500 text-sm mt-2">{error}</p>
                         )}
-                <button type="submit" className="text-xl text-white bg-black rounded-lg w-full py-2"> Login </button>
+                <button 
+                    type="submit" 
+                    disabled={isLoading}
+                    className={`text-xl text-white bg-black rounded-lg w-full py-2 relative ${isLoading ? 'opacity-70' : ''}`}
+                > 
+                    {isLoading ? (
+                        <>
+                            <div className="absolute left-0 top-0 w-full">
+                               <ReactLoading type="cube" color="#00000" height={20} width={20} />
+                            <span className="opacity-0" >Login</span>
+                            </div>
+                        </>
+                    ) : (
+                        'Login'
+                    )}
+                </button>
             </form>
             <div className="text-xs md:text-sm mt-2">
                 <p>Don't have an account.<Link className="text-blue-600" to='/signup'>  Create one ?</Link></p>

@@ -52,21 +52,19 @@ export function ForgotPassword() {
             }
         }
         catch(e) {
-            console.log(e.response);
             setError(e.response.data.message);
         }
     };
 
     const onOTPSubmit = async (otp) => {
         try {
-            console.log(userId, otp);
             const response = await axios
                       .post(`${import.meta.env.VITE_API_URL}/api/v1/users/verify`, {userId, otp});
             setOtpScreen(false);
             setReset(true);
         }
         catch(e) {
-            console.log(e.response);
+    
             setError(e.response.data.message);
         }
     }

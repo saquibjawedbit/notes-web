@@ -33,15 +33,21 @@ const sendOTP = async (emailId, id) => {
             html: emailTemplate(otpCode),
         };
 
+        // Delete any existing OTPs for this user
+        await Otp.deleteMany({ userId: id });
+
+        const expirationTime = new Date(Date.now() + 10 * 60 * 1000);
+        console.log(`OTP will expire at: ${expirationTime}`);
+
         const otp = await Otp.create({
             userId: id,
             otp: otpCode,
+            expiredAt: expirationTime
         });
-        await otp.save();
-        // Send email with detailed error logging
+
         try {
             await sendEmail(mailOptions);
-        
+            console.log(`OTP sent successfully to ${emailId}`);
         } catch (emailError) {
             console.error("Email Error:", emailError);
             throw new ApiError(500, "Failed to send email");
@@ -50,7 +56,8 @@ const sendOTP = async (emailId, id) => {
         return { success: true };
     }
     catch (error) {
-        console.log(error);
+        console.error("OTP Creation Error:", error);
+        throw new ApiError(500, "Failed to send OTP");
     }
 }
 
@@ -154,14 +161,16 @@ const verifyUser = asyncHandler(async (req, res) => {
     const otpDoc = await Otp.findOne({userId});
 
     if(!otpDoc) {
-        throw new ApiError(401, "Invalid OTP");
+        throw new ApiError(401, "OTP not found or already expired");
     }
 
-    // Compare the expiration date with the current timestamp
-    if (otpDoc.expiredAt.getTime() < Date.now()) {
-        // OTP has expired
+    console.log(`Current time: ${new Date()}`);
+    console.log(`OTP expiry time: ${otpDoc.expiredAt}`);
+
+    // Check if OTP has expired
+    if (Date.now() > otpDoc.expiredAt.getTime()) {
         await Otp.deleteMany({ userId });
-        throw new ApiError(401, "OTP has expired");
+        throw new ApiError(401, "OTP has expired. Please request a new one");
     }
 
     const validOTP = await otpDoc.isOtpCorrect(otp);

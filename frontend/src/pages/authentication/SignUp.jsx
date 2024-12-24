@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from '../../context/useAuth.jsx';
+import ReactLoading from 'react-loading';
 
 export function SignUp() {
     const location = useLocation();
@@ -16,6 +17,7 @@ export function SignUp() {
     });
     const [error, setError] = useState("");
     const [userId, setUserId] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const {setUser} = useAuth();
@@ -52,8 +54,11 @@ export function SignUp() {
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
+        
         if (credential.password !== credential.confirmPassword) {
             setError("Password and Confirm Password should be the same");
+            setIsLoading(false);
             return;
         }
 
@@ -67,6 +72,9 @@ export function SignUp() {
         catch (error) {
             setError(error.response.data.message);
         }
+        finally {
+            setIsLoading(false);
+        }
     };
 
     const onOTPSubmit = async (otp) => {
@@ -76,7 +84,9 @@ export function SignUp() {
                 userId: userId,
             };
 
-            await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/verify`, otpDoc);
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/verify`, otpDoc);
+            console.log(response);
+            const user = response.data.data.user;
             setUser(user);
             navigate("/notes");
         }
@@ -156,9 +166,19 @@ export function SignUp() {
 
                         <button
                             type="submit"
-                            className="text-xl text-white bg-black rounded-lg w-full py-2 mt-4"
+                            disabled={isLoading}
+                            className={`text-xl text-white bg-black rounded-lg w-full py-2 mt-4 relative ${isLoading ? 'opacity-70' : ''}`}
                         >
-                            Create Account
+                            {isLoading ? (
+                                <>
+                                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                                        <ReactLoading type="cube" color="#00000" height={20} width={20} />
+                                    </div>
+                                    <span className="opacity-0">Create Account</span>
+                                </>
+                            ) : (
+                                'Create Account'
+                            )}
                         </button>
                     </form>
                     <div className="text-xs md:text-sm mt-2">
