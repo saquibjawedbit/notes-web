@@ -4,8 +4,6 @@ import axios from 'axios';
 import { useParams } from 'react-router';
 import ReactLoading from 'react-loading';
 
-pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
 
 const PdfViewer = () => {
     const [pdfString, setPdfString] = useState('');
@@ -16,6 +14,7 @@ const PdfViewer = () => {
     const [scale, setScale] = useState(1.0); // Add scale state with default 1.5
 
     useEffect(() => {
+        pdfjs.GlobalWorkerOptions.workerSrc =`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
         const fetchPdf = async () => {
             try {
                 const response = await axios.get(
