@@ -4,8 +4,7 @@ import axios from 'axios';
 import { useParams } from 'react-router';
 import ReactLoading from 'react-loading';
 
-// Update worker configuration for newer version
-pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+
 
 const PdfViewer = () => {
     const [pdfString, setPdfString] = useState('');
