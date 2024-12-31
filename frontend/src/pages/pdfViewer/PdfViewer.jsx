@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useParams } from 'react-router';
 import ReactLoading from 'react-loading';
 
+pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 
 const PdfViewer = () => {
