@@ -45,7 +45,7 @@ export default function Chapters() {
               key={ch._id} 
               index={index} 
               name={ch.name} 
-              len={chapterList.length} 
+              len={ch.notes.length}
               subject={subject} 
               chapter={chapter}
             />

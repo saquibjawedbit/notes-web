@@ -1,5 +1,4 @@
 import './App.css'
-import { ShopingWidget } from '../../components/BoxDetail/ShopingWidget/ShopingWidget';
 import ReactPlayer from 'react-player';
 import { CallToActionButton } from '../../components/buttons/CallActionButton';
 import {CarousalElement} from '../../components/BoxDetail/CarousalElement'
@@ -52,7 +51,7 @@ function App() {
   <section className='w-full h-full flex gap-8 md:gap-6 justify-center items-center flex-col sm:flex-row px-16'>
         {data.map((value) => <CarousalElement key={value.id} img={value.image} title={value.title} description={value.desc} />)}
     </section>
-    <section className='w-full h-full flex flex-col text-center lg:text-start lg:flex-row gap-6 justify-center px-8 md:px-24 mt-36'>
+    <section className='w-full h-full flex flex-col text-center lg:text-start lg:flex-row gap-6 justify-center px-8 md:px-24 mt-36 mb-16'>
         <div className="flex-1">
           <ReactPlayer url="https://www.youtube.com/watch?v=R4IiubxBU9w&t" width={"100%"} controls />
         </div>
@@ -65,14 +64,6 @@ function App() {
             <CallToActionButton title={"Learn"}/>
           </div>
         </div>
-    </section>
-    <section className='w-full h-full container'>
-      <div className="flex container mx-auto justify-center flex-wrap gap-16 my-36">
-        <ShopingWidget/>
-        <ShopingWidget/>
-        <ShopingWidget/>
-        <ShopingWidget/>
-      </div>
     </section>
   </div>
 }
