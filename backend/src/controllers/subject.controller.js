@@ -4,6 +4,7 @@ import ApiResponse from "../utils/ApiResponse.js";
 import { Subject } from "../models/subject.model.js";
 import { Note } from "../models/note.model.js";
 import { User } from "../models/user.model.js";
+import { deleteFromCloudinary } from "../utils/cloudinary.js";
 
 const getSubject = asyncHandler(async (req, res) => {
     const {grade} = req.params;
@@ -139,5 +140,6 @@ const readNote = asyncHandler(async (req, res) => {
         new ApiResponse(200, noteObject ,"Note Fetched Successfully")
     );
 });
+
 
 export {getSubject, getChapters, getNotes, readNote};

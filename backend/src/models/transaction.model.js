@@ -33,7 +33,7 @@ const transactionSchema = mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ['created', 'authorized', 'captured', 'failed', 'refunded'],
+            enum: ['created', 'authorized','failed', 'refunded'],
             default: 'created', // Transaction status
         },
     },

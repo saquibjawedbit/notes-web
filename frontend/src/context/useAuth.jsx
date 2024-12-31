@@ -55,6 +55,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         isAuthenticated: !!user,
         loading,
+        verified: (user != null) ? user.verified : false,
         admin: (user != null) ? (user.role == "admin") : false
     };
 

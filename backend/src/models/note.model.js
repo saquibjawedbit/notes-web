@@ -22,11 +22,6 @@ const noteScheme = new mongoose.Schema(
             default: 0,
             required: true,
         },
-        purchasedBy: {
-            type: [mongoose.Schema.Types.ObjectId], //Array of ObjectIds referencing Users
-            ref: "User",
-            default: [],
-        },
         isPublished: {
             type: Boolean, 
             default: true,

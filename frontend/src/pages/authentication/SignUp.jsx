@@ -33,6 +33,7 @@ export function SignUp() {
     useEffect(()=>{
         const sendOTP = async () => {
             try {
+                
                 await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/resend-otp`, { userId: location.state.userId });
             }
             catch (error) {
@@ -41,10 +42,7 @@ export function SignUp() {
             }
         };
 
-        if(location.state) {
-
-            console.log(location.state);
-        
+        if(location.state) {  
             setUserId(location.state.userId);
             setOtpScreen(location.state.otpScreen);
 

@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from  'axios';
 import { useAuth } from "../../context/useAuth.jsx";
+import ReactLoading from 'react-loading';
 
 export function Home() {
     const [isOpen, setIsOpen] = useState(false);
     const [category, setCategory] = useState("JEE");
     const [subjects, setSubjects] = useState([]);
-    const {user, loading} = useAuth();
+    const {user, loading, setUser} = useAuth();
+    const [isLoadingSubjects, setIsLoadingSubjects] = useState(false);
 
     // console.log("value changes");
 
@@ -18,6 +20,7 @@ export function Home() {
 
     useEffect(() => {
        const loadData = async () => {
+            setIsLoadingSubjects(true);
             try {
                 const respone = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/subjects/${category}`);
                 const subjects = respone.data.data;
@@ -25,6 +28,9 @@ export function Home() {
             }
             catch(e) {
                 console.log(e);
+            }
+            finally {
+                setIsLoadingSubjects(false);
             }
        };
        loadData();
@@ -42,7 +48,6 @@ export function Home() {
         else if (index === 3) setCategory("XI");
         else if (index === 4) setCategory("X");
         else setCategory("IX");
-
         toggleDropdown();
     }
 
@@ -124,6 +129,7 @@ export function Home() {
         </Link>);
     }
 
+
     const updateClass = async () => {
         try {
             await axios
@@ -131,6 +137,7 @@ export function Home() {
                 "class" : category,
               });
             setUser((prev) => ({...prev, class: category}));
+            console.log("class updated");
         }
         catch(e) {
             console.log(e);
@@ -213,7 +220,7 @@ export function Home() {
             </div>
         </div>
     }
-
+  
     return <div className='bg-slate-100 pb-12 h-full w-full'>
         <div className="flex justify-between px-8 md:px-16 py-4">
             <div className="flex flex-col gap-4">
@@ -222,10 +229,30 @@ export function Home() {
             </div>
             <DropDownButton />
         </div>
-        {!category && <AskSubject />}
+        {user && !(user.class) && <AskSubject />}
         <div className="mt-12 flex items-start justify-center min-w-screen">
-            <div className="flex bg-white h-fit max-w-screen-lg md:min-w-[720px] min-h-[500px] py-12 px-32 justify-between items-center flex-wrap gap-4 rounded-3xl">
-                {subjects.length != 0 && subjects.map((element) => <Subject key={element._id} title={element.name} chapter={element.chaptersCount} icon={element.thumbnail} />)}
+            <div className="flex bg-white h-fit max-w-screen-lg md:min-w-[720px] min-h-[500px] py-12 px-32 justify-between items-center flex-wrap gap-4 rounded-3xl relative">
+                {isLoadingSubjects ? (
+                    <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-80">
+                        <div className="flex flex-col items-center gap-4">
+                            <ReactLoading type="cubes" color="#000000" height={50} width={50} />
+                            <p className="text-gray-600">Loading subjects...</p>
+                        </div>
+                    </div>
+                ) : subjects.length === 0 ? (
+                    <div className="w-full text-center text-gray-500">
+                        No subjects found
+                    </div>
+                ) : (
+                    subjects.map((element) => (
+                        <Subject 
+                            key={element._id} 
+                            title={element.name} 
+                            chapter={element.chaptersCount} 
+                            icon={element.thumbnail} 
+                        />
+                    ))
+                )}
             </div>
         </div>
     </div>

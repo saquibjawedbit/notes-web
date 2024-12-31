@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getSubject, getChapters, getNotes, readNote } from "../controllers/subject.controller.js";
+import { getSubject, getChapters, getNotes, readNote} from "../controllers/subject.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();

@@ -2,7 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { Note } from "../models/note.model.js";
-import uploadOnCloudinary from "../utils/cloudinary.js";
+import {uploadOnCloudinary, deleteFromCloudinary} from "../utils/cloudinary.js";
 import { Subject } from "../models/subject.model.js";
 
 const createSubject = asyncHandler(async (req, res) => {
@@ -133,39 +133,97 @@ const getSubjectsByGrade = asyncHandler(async (req, res) => {
 const deleteSubject = asyncHandler(async (req, res) => {
     const { subjectId } = req.params;
 
-    // Find subject to get all note IDs
-    const subject = await Subject.findById(subjectId);
+    if (!subjectId) {
+        throw new ApiError(400, "Subject ID is required");
+    }
+
+    // Find the subject and all its related notes
+    const subject = await Subject.findById(subjectId).populate('chapters.notes');
+    
     if (!subject) {
         throw new ApiError(404, "Subject not found");
     }
 
-    // Collect all note IDs from chapters
-    const noteIds = subject.chapters.reduce((acc, chapter) => {
-        return acc.concat(chapter.notes);
-    }, []);
+    try {
+        // Delete subject thumbnail from Cloudinary
+        const subjectThumbnailId = subject.thumbnail?.split('/').pop()?.split('.')[0];
+        if (subjectThumbnailId) {
+            await deleteFromCloudinary(subjectThumbnailId);
+        }
 
-    // Delete all associated notes
-    await Note.deleteMany({ _id: { $in: noteIds } });
+        // Delete all notes and their associated files
+        for (const chapter of subject.chapters) {
+            for (const noteId of chapter.notes) {
+                const note = await Note.findById(noteId);
+                if (note) {
+                    // Delete note thumbnail from Cloudinary
+                    const noteThumbnailId = note.thumbnail?.split('/').pop()?.split('.')[0];
+                    if (noteThumbnailId) {
+                        await deleteFromCloudinary(noteThumbnailId);
+                    }
 
-    // Delete the subject
-    await Subject.findByIdAndDelete(subjectId);
+                    // Delete PDF file from Cloudinary
+                    const pdfId = note.pdfFile?.split('/').pop()?.split('.')[0];
+                    if (pdfId) {
+                        await deleteFromCloudinary(pdfId);
+                    }
 
-    return res.status(200).json(
-        new ApiResponse(200, null, "Subject and associated notes deleted successfully")
-    );
+                    // Delete note from database
+                    await Note.findByIdAndDelete(noteId);
+                }
+            }
+        }
+
+        // Finally delete the subject
+        await Subject.findByIdAndDelete(subjectId);
+
+        return res.status(200)
+            .json(
+                new ApiResponse(
+                    200,
+                    {},
+                    "Subject and all associated content deleted successfully"
+                )
+            );
+
+    } catch (error) {
+        console.error("Error during deletion:", error);
+        throw new ApiError(500, "Error deleting subject and associated content");
+    }
 });
 
 const deleteNote = asyncHandler(async (req, res) => {
     const { noteId } = req.params;
 
-    const note = await Note.findByIdAndDelete(noteId);
+    // Find the note first to get file URLs
+    const note = await Note.findById(noteId);
     if (!note) {
         throw new ApiError(404, "Note not found");
     }
 
-    return res.status(200).json(
-        new ApiResponse(200, null, "Note deleted successfully")
-    );
+    try {
+        // Delete thumbnail from Cloudinary
+        const thumbnailId = note.thumbnail?.split('/').pop()?.split('.')[0];
+        if (thumbnailId) {
+            await deleteFromCloudinary(thumbnailId);
+        }
+
+        // Delete PDF file from Cloudinary
+        const pdfId = note.pdfFile?.split('/').pop()?.split('.')[0];
+        if (pdfId) {
+            await deleteFromCloudinary(pdfId);
+        }
+
+        // Delete note from database
+        await Note.findByIdAndDelete(noteId);
+
+        return res.status(200).json(
+            new ApiResponse(200, null, "Note and associated files deleted successfully")
+        );
+    } catch (error) {
+        console.error("Error during note deletion:", error);
+        throw new ApiError(500, "Error deleting note and associated files");
+    }
 });
 
 const updateNote = asyncHandler(async (req, res) => {

@@ -19,7 +19,7 @@ import CreateNote from './pages/admin/CreateNote.jsx';
 
 export default function Router() {
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, verified} = useAuth();
 
   return <>
     <BrowserRouter>
@@ -32,8 +32,9 @@ export default function Router() {
             <Route path='/notes/:subject/:chapter' element={<Chapters />} />
           </Route>
         </Route>
+        
         <Route path='/' element={<AuthLayout />}>
-          {isAuthenticated ? (
+          {(isAuthenticated && verified) ? (
             <Route path="*" element={<Navigate to="/notes" />} />
           ) : (
             <>
