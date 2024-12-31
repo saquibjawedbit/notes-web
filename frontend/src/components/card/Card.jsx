@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import ReactLoading from 'react-loading';
 import { ItemVeiw } from "./ItemView";
+import { useAuth } from "../../context/useAuth.jsx";
 
 /**
    * Card component that displays a module card and its notes.
@@ -19,6 +20,7 @@ export function Card({ index, name, len, subject, chapter }) {
     const [buyView, setBuyView] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    const {user} = useAuth();
 
     const loadData = useCallback(async () => {
         if (!noteList.length && !isLoading) {
@@ -82,7 +84,7 @@ export function Card({ index, name, len, subject, chapter }) {
                                         <h4>{notes.note.title}</h4>
                                         <img 
                                             className='w-6 h-6' 
-                                            src={notes.isPurchased ? "/check.svg" : "/lock.svg"} 
+                                            src={user.prchasedPdf.contains(notes.note._id) ? "/check.svg" : "/lock.svg"} 
                                             alt={notes.isPurchased ? "Purchased" : "Locked"}
                                         />
                                     </div>

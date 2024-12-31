@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { useAuth } from "../../context/useAuth";
+import { useAuth } from "../../context/useAuth.jsx";
 
 function ItemVeiw({ item, onBack }) {
   const {user} = useAuth();
