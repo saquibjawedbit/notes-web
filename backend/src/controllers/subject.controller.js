@@ -5,6 +5,8 @@ import { Subject } from "../models/subject.model.js";
 import { Note } from "../models/note.model.js";
 import { User } from "../models/user.model.js";
 import { deleteFromCloudinary } from "../utils/cloudinary.js";
+import { Transaction } from "../models/transaction.model.js";
+import axios from "axios";
 
 const getSubject = asyncHandler(async (req, res) => {
     const {grade} = req.params;
@@ -70,26 +72,24 @@ const getNotes = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Chapter does not exist");
     }
 
-    const listOfNotes = chapters.chapters;
+    const chapterData = chapters.chapters.filter((data) => data.name == chapter);
+
+    if(chapterData.length == 0) {
+        throw new ApiError(400, "Chapter does not exist");
+    }
+
+    const listOfNotes = chapterData[0].notes;
 
 
     const result = await Promise.all(listOfNotes.map(async (data) => {
-        const note = await Note.findById(data.notes).select("-pdfFile -isPublished");
+        const note = await Note.findById(data).select("-pdfFile -isPublished");
     
         if (!note) {
             throw new ApiError(400, "Something went wrong");
         }
     
-        let isPurchased = false;
-        if (user.purchasedPdf.find((pdf) => pdf._id === data.notes)) {
-            isPurchased = true;
-        }
-    
-        return {
-            note, isPurchased
-        };
+        return note;
     }));
-
 
     return res.status(200).json(
         new ApiResponse(200, result, "Note Fetched Successfully")
@@ -97,48 +97,48 @@ const getNotes = asyncHandler(async (req, res) => {
 });
 
 const readNote = asyncHandler(async (req, res) => {
-    const {id} = req.params;
+    try {
+        const {id} = req.params;
 
-    //Check if id is null
-    if(!id) {
-        throw new ApiError(400, "Id is Required");
+        //Check if id is null
+        if(!id) {
+            throw new ApiError(400, "Id is Required");
+        }
+
+        //Check if this id exist in user PurchasedPdf
+        const user = req.user;
+        const isPurchased = user.purchasedPdf.includes(id);
+
+        if(!isPurchased) {
+            throw new ApiError(401, "Protected Content");
+        }
+
+        // Search for transaction
+        const transaction = await Transaction.findOne({noteId: id, userId: user._id}).select("status");
+
+        if(transaction.status != "authorized") {
+            throw new ApiError(401, "Protected Content");
+        }
+
+        const noteObject = await Note.findById(id).select("pdfFile");
+
+        const pdfUrl = noteObject.pdfFile;
+        const response = await axios.get(pdfUrl, {
+            responseType: 'stream',
+            
+        });
+
+        // Headers for displaying the PDF in the browser
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'inline; filename="secure.pdf"');
+
+        // Pipe the Cloudinary PDF stream directly to the client
+        response.data.pipe(res);
     }
-
-    //Check if this id exist in user PurchasedPdf
-    const user = req.user;
-
-    const isPurchased = user.purchasedPdf.find((pdf) => pdf._id === data.notes);
-
-    if(!isPurchased) {
-        throw new ApiError(401, "Protected Content");
+    catch (error) {
+        console.error('Error streaming PDF from Cloudinary:', error);
+        res.status(500).send('Failed to fetch the PDF');
     }
-
-    // Find the note
-
-    const note = Note.findById(id);
-
-    if(!note) {
-        throw new ApiError(404, "Content not found");
-    }
-
-    // Recheck
-    const isPurchasedD = note.purchasedBy.find((pdf) => pdf._id === user._id);
-
-    if(!isPurchased) {
-        throw new ApiError(401, "Protected Content");
-    }
-
-    // Convert the Mongoose document to a plain JavaScript object
-    const noteObject = note.toObject();
-
-    // Remove sensitive fields
-    delete noteObject.purchasedBy;
-    delete userObject.isPublished;
-
-    return res.status(200)
-    .json(
-        new ApiResponse(200, noteObject ,"Note Fetched Successfully")
-    );
 });
 
 

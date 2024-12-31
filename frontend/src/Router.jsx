@@ -15,6 +15,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 import { useAuth } from './context/useAuth.jsx';
 import EditNote from './pages/admin/EditNote.jsx';
 import CreateNote from './pages/admin/CreateNote.jsx';
+import PdfViewer from './pages/pdfViewer/PdfViewer.jsx';
 
 
 export default function Router() {
@@ -30,6 +31,7 @@ export default function Router() {
           <Route path='' element={<ProtectedRoute />}>
             <Route path='/notes' element={<Home />} />
             <Route path='/notes/:subject/:chapter' element={<Chapters />} />
+            <Route path='/pdf/:noteId' element={<PdfViewer />} />
           </Route>
         </Route>
         
