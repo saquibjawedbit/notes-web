@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from  'axios';
+import axios from 'axios';
 import { useAuth } from "../../context/useAuth.jsx";
 import ReactLoading from 'react-loading';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export function Home() {
     const [isOpen, setIsOpen] = useState(false);
@@ -11,12 +12,9 @@ export function Home() {
     const {user, loading, setUser} = useAuth();
     const [isLoadingSubjects, setIsLoadingSubjects] = useState(false);
 
-    // console.log("value changes");
-
     useEffect(() => {
         if(user != null) setCategory(user.class);
     }, [user]);
-
 
     useEffect(() => {
        const loadData = async () => {
@@ -36,7 +34,6 @@ export function Home() {
        loadData();
     }, [category]);
 
-
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     }
@@ -52,83 +49,113 @@ export function Home() {
     }
 
     function DropDownButton() {
-        return <div className="flex">
-            <div className="relative inline-block">
-                {/* Button to open/close the dropdown */}
-                <button
-                    onClick={toggleDropdown}
-                    className="flex justify-between bg-black text-white font-semibold px-4 py-2 rounded w-24"
-                >
-                    {category}
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        stroke="currentColor"
-                    // strokeWidth="2" // Thicker stroke for a bolder appearance
+        return (
+            <motion.div 
+                className="flex"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <div className="relative inline-block">
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={toggleDropdown}
+                        className="flex justify-between bg-black text-white font-semibold px-4 py-2 rounded w-24"
                     >
-                        <path
-                            fillRule="evenodd"
-                            d="M5.23 7.21a.75.75 0 011.06.02L10 11.585l3.71-4.355a.75.75 0 111.14.976l-4 4.7a.75.75 0 01-1.14 0l-4-4.7a.75.75 0 01.02-1.06z"
-                            clipRule="evenodd"
-                        />
-                    </svg>
-                </button>
+                        {category}
+                        <motion.svg
+                            animate={{ rotate: isOpen ? 180 : 0 }}
+                            transition={{ duration: 0.3 }}
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            stroke="currentColor"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M5.23 7.21a.75.75 0 011.06.02L10 11.585l3.71-4.355a.75.75 0 111.14.976l-4 4.7a.75.75 0 01-1.14 0l-4-4.7a.75.75 0 01.02-1.06z"
+                                clipRule="evenodd"
+                            />
+                        </motion.svg>
+                    </motion.button>
 
-                {/* Dropdown content */}
-                {(isOpen && !loading && (user.class)) && (
-                    <div className="absolute right-0  mt-2 w-48 bg-white shadow-md rounded">
-                        <button
-                            onClick={() => (onDropDownClick(0))}
-                            className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
-                        >
-                            JEE
-                        </button>
-                        <button
-                            onClick={() =>(onDropDownClick(1))}
-                            className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
-                        >
-                            NEET
-                        </button>
-                        <button
-                            onClick={() => (onDropDownClick(2))}
-                            className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
-                        >
-                            XII
-                        </button>
-                        <button
-                            onClick={() => (onDropDownClick(3))}
-                            className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
-                        >
-                            XI
-                        </button>
-                        <button
-                            onClick={() =>( onDropDownClick(4))}
-                            className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
-                        >
-                            X
-                        </button>
-                        <button
-                            onClick={() => (onDropDownClick(5))}
-                            className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
-                        >
-                            IX
-                        </button>
-                    </div>
-                )}
-            </div>
-        </div>;
+                    <AnimatePresence>
+                        {(isOpen && !loading && (user.class)) && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                className="absolute right-0 mt-2 w-48 bg-white shadow-md rounded"
+                            >
+                                <button
+                                    onClick={() => (onDropDownClick(0))}
+                                    className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                >
+                                    JEE
+                                </button>
+                                <button
+                                    onClick={() =>(onDropDownClick(1))}
+                                    className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                >
+                                    NEET
+                                </button>
+                                <button
+                                    onClick={() => (onDropDownClick(2))}
+                                    className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                >
+                                    XII
+                                </button>
+                                <button
+                                    onClick={() => (onDropDownClick(3))}
+                                    className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                >
+                                    XI
+                                </button>
+                                <button
+                                    onClick={() =>( onDropDownClick(4))}
+                                    className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                >
+                                    X
+                                </button>
+                                <button
+                                    onClick={() => (onDropDownClick(5))}
+                                    className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                >
+                                    IX
+                                </button>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+            </motion.div>
+        );
     }
 
     function Subject({ title, chapter, icon }) {
-        return (<Link to = {`${category}/${title}`} className="flex flex-col items-center pt-4 gap-4 shadow-lg w-56 h-80 hover:shadow-2xl transition duration-300 rounded-lg">
-            <img src={icon} className="w-40 h-40" alt="" />
-            <h3 className="text-2xl font-semibold">{title}</h3>
-            <p className="text-lg text-slate-600">{chapter} Chapters</p>
-        </Link>);
+        return (
+            <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+            >
+                <Link to={`${category}/${title}`} className="flex flex-col items-center pt-4 gap-4 shadow-lg w-56 h-80 hover:shadow-2xl transition duration-300 rounded-lg bg-white">
+                    <motion.img 
+                        src={icon} 
+                        className="w-40 h-40" 
+                        alt="" 
+                        whileHover={{ rotate: [0, -5, 5, -5, 0] }}
+                        transition={{ duration: 0.5 }}
+                    />
+                    <h3 className="text-2xl font-semibold">{title}</h3>
+                    <p className="text-lg text-slate-600">{chapter} Chapters</p>
+                </Link>
+            </motion.div>
+        );
     }
-
 
     const updateClass = async () => {
         try {
@@ -144,117 +171,164 @@ export function Home() {
         }
     }   
 
-
     function AskSubject() {
-        return <div className="fixed flex justify-center items-center inset-0 h-screen bg-black bg-opacity-90">
-            <div className="flex flex-col justify-center items-center bg-white px-4 md:px-24 py-8 rounded-xl gap-4">
-                <h2 className="text-xl md:text-2xl font-bold">Please select your Class</h2>
-                <div className="flex">
-                    <div className="relative inline-block">
-                        {/* Button to open/close the dropdown */}
-                        <button
-                            onClick={toggleDropdown}
-                            className="flex justify-between bg-black text-white font-semibold px-4 py-2 rounded w-24"
-                        >
-                            {category}
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                stroke="currentColor"
-                            // strokeWidth="2" // Thicker stroke for a bolder appearance
+        return (
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed flex justify-center items-center inset-0 h-screen bg-black bg-opacity-90"
+            >
+                <motion.div
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                    className="flex flex-col justify-center items-center bg-white px-4 md:px-24 py-8 rounded-xl gap-4"
+                >
+                    <h2 className="text-xl md:text-2xl font-bold">Please select your Class</h2>
+                    <div className="flex">
+                        <div className="relative inline-block">
+                            <button
+                                onClick={toggleDropdown}
+                                className="flex justify-between bg-black text-white font-semibold px-4 py-2 rounded w-24"
                             >
-                                <path
-                                    fillRule="evenodd"
-                                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.585l3.71-4.355a.75.75 0 111.14.976l-4 4.7a.75.75 0 01-1.14 0l-4-4.7a.75.75 0 01.02-1.06z"
-                                    clipRule="evenodd"
-                                />
-                            </svg>
-                        </button>
-
-                        {/* Dropdown content */}
-                        {isOpen && (
-                            <div className="absolute mt-2 w-48 bg-white shadow-md rounded">
-                                <button
-                                    onClick={() => onDropDownClick(0)}
-                                    className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                {category}
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-5 w-5"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    stroke="currentColor"
                                 >
-                                    JEE
-                                </button>
-                                <button
-                                    onClick={() => onDropDownClick(1)}
-                                    className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                >
-                                    NEET
-                                </button>
-                                <button
-                                    onClick={() => onDropDownClick(2)}
-                                    className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                >
-                                    XII
-                                </button>
-                                <button
-                                    onClick={() => onDropDownClick(3)}
-                                    className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                >
-                                    XI
-                                </button>
-                                <button
-                                    onClick={() => onDropDownClick(4)}
-                                    className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                >
-                                    X
-                                </button>
-                                <button
-                                    onClick={() => onDropDownClick(5)}
-                                    className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                >
-                                    IX
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-                <button className="bg-black w-full h-12 text-white rounded-lg font-bold" onClick={updateClass}> Submit</button>
-            </div>
-        </div>
-    }
-  
-    return <div className='bg-slate-100 pb-12 h-full w-full'>
-        <div className="flex justify-between px-8 md:px-16 py-4">
-            <div className="flex flex-col gap-4">
-                <h1 className="font-bold text-2xl text-black">Study Materials</h1>
-                <h3 className="text-lg text-slate-900">Select Your Subject and Start Learning</h3>
-            </div>
-            <DropDownButton />
-        </div>
-        {user && !(user.class) && <AskSubject />}
-        <div className="mt-12 flex items-start justify-center min-w-screen">
-            <div className="flex bg-white h-fit max-w-screen-lg md:min-w-[720px] min-h-[500px] py-12 px-32 justify-between items-center flex-wrap gap-4 rounded-3xl relative">
-                {isLoadingSubjects ? (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-80">
-                        <div className="flex flex-col items-center gap-4">
-                            <ReactLoading type="cubes" color="#000000" height={50} width={50} />
-                            <p className="text-gray-600">Loading subjects...</p>
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M5.23 7.21a.75.75 0 011.06.02L10 11.585l3.71-4.355a.75.75 0 111.14.976l-4 4.7a.75.75 0 01-1.14 0l-4-4.7a.75.75 0 01.02-1.06z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                            </button>
+                            {isOpen && (
+                                <div className="absolute mt-2 w-48 bg-white shadow-md rounded">
+                                    <button
+                                        onClick={() => onDropDownClick(0)}
+                                        className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                    >
+                                        JEE
+                                    </button>
+                                    <button
+                                        onClick={() => onDropDownClick(1)}
+                                        className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                    >
+                                        NEET
+                                    </button>
+                                    <button
+                                        onClick={() => onDropDownClick(2)}
+                                        className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                    >
+                                        XII
+                                    </button>
+                                    <button
+                                        onClick={() => onDropDownClick(3)}
+                                        className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                    >
+                                        XI
+                                    </button>
+                                    <button
+                                        onClick={() => onDropDownClick(4)}
+                                        className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                    >
+                                        X
+                                    </button>
+                                    <button
+                                        onClick={() => onDropDownClick(5)}
+                                        className="flex w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                    >
+                                        IX
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
-                ) : subjects.length === 0 ? (
-                    <div className="w-full text-center text-gray-500">
-                        No subjects found
-                    </div>
-                ) : (
-                    subjects.map((element) => (
-                        <Subject 
-                            key={element._id} 
-                            title={element.name} 
-                            chapter={element.chaptersCount} 
-                            icon={element.thumbnail} 
-                        />
-                    ))
-                )}
-            </div>
-        </div>
-    </div>
+                    <motion.button 
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="bg-black w-full h-12 text-white rounded-lg font-bold" 
+                        onClick={updateClass}
+                    >
+                        Submit
+                    </motion.button>
+                </motion.div>
+            </motion.div>
+        );
+    }
+
+    return (
+        <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className='bg-slate-100 pb-12 h-full w-full pt-16'
+        >
+            <motion.div 
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="flex justify-between px-8 md:px-16 py-4"
+            >
+                <div className="flex flex-col gap-4">
+                    <motion.h1 
+                        initial={{ x: -20 }}
+                        animate={{ x: 0 }}
+                        className="font-bold text-2xl text-black"
+                    >
+                        Study Materials
+                    </motion.h1>
+                    <motion.h3 
+                        initial={{ x: -20 }}
+                        animate={{ x: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="text-lg text-slate-900"
+                    >
+                        Select Your Subject and Start Learning
+                    </motion.h3>
+                </div>
+                <DropDownButton />
+            </motion.div>
+
+            <AnimatePresence>
+                {user && !(user.class) && <AskSubject />}
+            </AnimatePresence>
+
+            <motion.div 
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="mt-12 flex items-start justify-center min-w-screen"
+            >
+                <div className="flex bg-white h-fit max-w-screen-lg md:min-w-[720px] min-h-[500px] py-12 px-32 justify-between items-center flex-wrap gap-4 rounded-3xl relative">
+                    {isLoadingSubjects ? (
+                        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-80">
+                            <div className="flex flex-col items-center gap-4">
+                                <ReactLoading type="cubes" color="#000000" height={50} width={50} />
+                                <p className="text-gray-600">Loading subjects...</p>
+                            </div>
+                        </div>
+                    ) : subjects.length === 0 ? (
+                        <div className="w-full text-center text-gray-500">
+                            No subjects found
+                        </div>
+                    ) : (
+                        subjects.map((element) => (
+                            <Subject 
+                                key={element._id} 
+                                title={element.name} 
+                                chapter={element.chaptersCount} 
+                                icon={element.thumbnail} 
+                            />
+                        ))
+                    )}
+                </div>
+            </motion.div>
+        </motion.div>
+    );
 }
 

@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import ReactLoading from 'react-loading';
-import { ItemVeiw } from "./ItemView";
 import { NotesBar } from "./NotesBar.jsx";
+import { useNavigate } from "react-router";
+import { motion, AnimatePresence } from 'framer-motion';
 
 /**
    * Card component that displays a module card and its notes.
@@ -17,9 +18,9 @@ import { NotesBar } from "./NotesBar.jsx";
 export function Card({ index, name, len, subject, chapter }) {
     const [open, setOpen] = useState(false);
     const [noteList, setNoteList] = useState([]);
-    const [buyView, setBuyView] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    const navigate = useNavigate();
 
     const loadData = useCallback(async () => {
         if (!noteList.length && !isLoading) {
@@ -46,8 +47,18 @@ export function Card({ index, name, len, subject, chapter }) {
     
 
     return (
-        <>
-            <div className="w-4/5 md:w-2/3">
+        <motion.div
+            layout
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="w-full max-w-4xl mx-auto"
+        >
+            <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className='bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300'
+            >
                 <div
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={() => setIsHovered(false)}
@@ -69,18 +80,29 @@ export function Card({ index, name, len, subject, chapter }) {
                         </div>
                     )}
                 </div>
+            </motion.div>
 
-                <div className={`grid transition-all duration-300 ease-in-out ${open ? "grid-rows-[1fr] opacity-100 mt-2" : "grid-rows-[0fr] opacity-0"}`}>
-                    <div className="overflow-hidden">
-                        {noteList.map((notes) => (
-                            <div key={notes._id}>
-                                {buyView && <ItemVeiw item={notes} onBack={() => setBuyView(false)}/>}
-                                <NotesBar notes={notes} onClick={() => setBuyView(true)}/>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </>
+            <AnimatePresence>
+                {open && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="mt-2 bg-gray-50 rounded-xl overflow-hidden"
+                    >
+                        <div className="overflow-hidden">
+                            {noteList.map((notes) => (
+                                <div key={notes._id}>
+                                    <NotesBar 
+                                        notes={notes} 
+                                        onClick={() => navigate(`/item/${notes._id}`, { state: notes })}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
     );
 }

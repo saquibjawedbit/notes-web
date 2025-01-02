@@ -1,5 +1,6 @@
 import React from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import {Link} from 'react-router-dom';
 
 
 export function Footer() {
@@ -9,21 +10,21 @@ export function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center">
           {/* Left Section */}
           <div className="text-center md:text-left mb-4 md:mb-0">
-            <h3 className="text-lg font-semibold">HRX</h3>
-            <p className="text-sm">© 2024 All Rights Reserved</p>
+            <h3 className="text-lg font-semibold">HR Science Quest</h3>
+            <p className="text-sm">© 2025 All Rights Reserved</p>
           </div>
 
           {/* Center Section */}
           <div className="flex space-x-4 text-sm">
-            <a href="#" className="hover:text-gray-400 transition">
+            <Link to="/privacy-policy" className="hover:text-gray-400 transition">
               Privacy Policy
-            </a>
-            <a href="#" className="hover:text-gray-400 transition">
+            </Link>
+            <Link to="/terms-of-service" className="hover:text-gray-400 transition">
               Terms of Service
-            </a>
-            <a href="#" className="hover:text-gray-400 transition">
+            </Link>
+            <Link to="/contact-us" className="hover:text-gray-400 transition">
               Contact Us
-            </a>
+            </Link>
           </div>
 
           {/* Social Media Section */}

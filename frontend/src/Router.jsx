@@ -16,6 +16,10 @@ import { useAuth } from './context/useAuth.jsx';
 import EditNote from './pages/admin/EditNote.jsx';
 import CreateNote from './pages/admin/CreateNote.jsx';
 import PdfViewer from './pages/pdfViewer/PdfViewer.jsx';
+import {PrivacyPolicy} from './pages/policies/PrivacyPolicy.jsx';
+import { TermsOfService } from './pages/policies/TermsOfService.jsx';
+import ContactUs from './pages/policies/ContactUs.jsx';
+import { ItemVeiw } from './components/card/ItemView.jsx';
 
 
 export default function Router() {
@@ -28,10 +32,14 @@ export default function Router() {
         <Route path="/" element={<Layout />}>
           <Route path="" element={<App />} />
           <Route path='/about-us' element={<AboutUs />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/contact-us" element={<ContactUs />} />
           <Route path='' element={<ProtectedRoute />}>
             <Route path='/notes' element={<Home />} />
             <Route path='/notes/:subject/:chapter' element={<Chapters />} />
             <Route path='/pdf/:noteId' element={<PdfViewer />} />
+            <Route path='/item/:noteId' element={<ItemVeiw />} /> {/* Updated route */}
           </Route>
         </Route>
         

@@ -1,11 +1,10 @@
 import React from "react"
 import { useAuth } from "../../context/useAuth.jsx";
 import { useNavigate } from "react-router";
+import { motion } from 'framer-motion';
 
-function NotesBar({onClick, notes}) {
-
-    const {user} = useAuth();
-
+export function NotesBar({ notes, onClick }) {
+    const { user } = useAuth();
     const purchasedPdfSet = new Set(user.purchasedPdf);
     const isPurchased = purchasedPdfSet.has(notes._id);
     const navigate = useNavigate();
@@ -20,22 +19,43 @@ function NotesBar({onClick, notes}) {
     }
 
     return (
-        <div onClick={openPdf}
-            className={
-                'bg-white py-4 rounded-xl shadow-lg ' +
-                'hover:shadow-xl cursor-pointer lg:px-24 ' +
-                'font-semibold mb-2'
-            }>
-            <div className='flex justify-between px-8'>
-                <h4>{notes.title}</h4>
-                <img
-                    className='w-6 h-6'
-                    src={isPurchased ? "/check.svg" : "/lock.svg"}
-                    alt={isPurchased ? "Purchased" : "Locked"}
-                />
+        <motion.div
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
+            className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer"
+            onClick={openPdf}
+        >
+            <div className="flex items-center gap-4">
+                <div className="relative flex-shrink-0">
+                    <img src={notes.thumbnail} alt="" className="w-16 h-16 rounded-lg object-cover" />
+                    <motion.div 
+                        className={`absolute -top-2 -right-2 p-1.5 rounded-full ${
+                            isPurchased ? 'bg-green-500' : 'bg-gray-500'
+                        }`}
+                        whileHover={{ scale: 1.2 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        {isPurchased ? (
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        ) : (
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        )}
+                    </motion.div>
+                </div>
+                <div className="flex-grow">
+                    <h3 className="text-lg font-semibold text-gray-900">{notes.title}</h3>
+                    <p className="text-gray-600 text-sm line-clamp-2">{notes.description}</p>
+                </div>
+                <div className="flex-shrink-0">
+                    {!isPurchased && (
+                        <span className="text-green-600 font-semibold">₹{notes.price}</span>
+                    )}
+                </div>
             </div>
-        </div>
+        </motion.div>
     );
 }
-
-export {NotesBar};

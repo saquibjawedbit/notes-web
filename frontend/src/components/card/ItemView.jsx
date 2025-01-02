@@ -1,9 +1,14 @@
 import React from "react";
 import axios from "axios";
 import { useAuth } from "../../context/useAuth.jsx";
+import { useLocation, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
-function ItemVeiw({ item, onBack }) {
-  const {user} = useAuth();
+function ItemVeiw() {
+    const { user } = useAuth();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const item = location.state;
 
     const payNow = async () => {
         try {
@@ -47,21 +52,138 @@ function ItemVeiw({ item, onBack }) {
           console.error('Error during payment:', error);
         }
       };
-    
-    return <div className="fixed inset-0 h-screen justify-center items-center flex bg-white bg-opacity-50">
-        <img src="/back.svg" alt="Back" className="w-8 h-8 fixed top-4 md:top-16 left-4 md:left-24 cursor-pointer" onClick={onBack}/>
-        <div className="flex flex-col md:flex-row justify-center items-center gap-4 bg-white px-4 py-4 shadow-xl">
-            <img className="w-56 h-72 object-contain bg-black" src={item.thumbnail} alt="Thumbnail" />
-            <div className="flex flex-col h-72 w-56 md:w-72 items-center md:items-start">
-                <div className="flex flex-col gap-2 text-wrap overflow-hidden w-full">
-                    <h1 className="font-bold text-2xl">{item.title} </h1>
-                    <h2 className="text-xl font-bold">Rs.{item.price}</h2>
-                    <p>{item.description}</p>
+
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 min-h-screen flex items-center justify-center z-50"
+            style={{
+                background: 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8))',
+                backdropFilter: 'blur(8px)'
+            }}
+        >
+            <motion.div
+                initial={{ scale: 0.9, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.9, y: 20 }}
+                className="relative max-w-5xl w-[95%] mx-4 bg-white rounded-2xl overflow-hidden shadow-2xl"
+            >
+                {/* Header with back button */}
+                <motion.div 
+                    className="absolute top-4 left-4 z-10"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                >
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 transition-colors"
+                    >
+                        <img src="/back.svg" alt="Back" className="w-6 h-6" />
+                    </button>
+                </motion.div>
+
+                <div className="grid md:grid-cols-2 gap-8 p-8">
+                    {/* Left side - Image */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="flex flex-col gap-4"
+                    >
+                        <div className="relative aspect-[3/4] rounded-xl overflow-hidden shadow-lg">
+                            <motion.img
+                                src={item.thumbnail}
+                                alt={item.title}
+                                className="w-full h-full object-cover"
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ duration: 0.3 }}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                        </div>
+                    </motion.div>
+
+                    {/* Right side - Content */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="flex flex-col justify-between"
+                    >
+                        <div className="space-y-6">
+                            <motion.h1 
+                                className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                            >
+                                {item.title}
+                            </motion.h1>
+
+                            <div className="space-y-2">
+                                <motion.div 
+                                    className="flex items-center gap-2"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.2 }}
+                                >
+                                    <span className="text-3xl font-bold text-green-600">₹{item.price}</span>
+                                    <span className="text-sm text-gray-500 bg-green-50 px-2 py-1 rounded-full">
+                                        One-time payment
+                                    </span>
+                                </motion.div>
+
+                                <motion.p 
+                                    className="text-gray-600 leading-relaxed text-lg"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.3 }}
+                                >
+                                    {item.description}
+                                </motion.p>
+                            </div>
+
+                            {/* Features or Benefits */}
+                            <motion.div 
+                                className="space-y-3"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.4 }}
+                            >
+                                <h3 className="font-semibold text-lg">What you'll get:</h3>
+                                <ul className="space-y-2">
+                                    <li className="flex items-center gap-2">
+                                        <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Lifetime access to content
+                                    </li>
+                                    <li className="flex items-center gap-2">
+                                        <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        High-quality study materials
+                                    </li>
+                                    
+                                </ul>
+                            </motion.div>
+                        </div>
+
+                        <motion.button
+                            className="mt-8 w-full py-4 rounded-xl text-white text-xl font-bold
+                                     bg-gradient-to-r from-blue-600 to-purple-600 
+                                     hover:from-blue-700 hover:to-purple-700
+                                     shadow-lg hover:shadow-xl
+                                     transition-all duration-300"
+                            onClick={(e) => {e.preventDefault(); payNow();}}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                        >
+                            Purchase Now
+                        </motion.button>
+                    </motion.div>
                 </div>
-                <button className="bg-black rounded-sm text-white font-bold w-56 py-3 mt-auto text-2xl" onClick={(e) => {e.preventDefault(); payNow();}}>BUY</button>
-            </div>
-        </div>
-    </div>;
+            </motion.div>
+        </motion.div>
+    );
 }
 
-export {ItemVeiw}
+export { ItemVeiw };

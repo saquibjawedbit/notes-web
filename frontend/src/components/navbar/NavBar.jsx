@@ -1,16 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FiAlignJustify, FiX } from 'react-icons/fi';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/useAuth.jsx'; // Add this import
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../context/useAuth.jsx';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { isAuthenticated, logout } = useAuth(); // Add this line
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const toggleMenu = () => {
-    setIsOpen((isOpen) => !isOpen);
-  };
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleAuthAction = async () => {
     if (isAuthenticated) {
@@ -25,53 +33,129 @@ export function NavBar() {
     }
   };
 
+  const navLinkClass = (path) => `
+    relative font-semibold text-gray-700 hover:text-blue-600
+    after:content-[''] after:absolute after:w-full after:h-0.5
+    after:bg-blue-600 after:left-0 after:bottom-[-4px]
+    after:rounded-full after:transition-all after:duration-300
+    ${location.pathname === path ? 
+      'text-blue-600 after:opacity-100 after:scale-x-100' : 
+      'after:opacity-0 after:scale-x-0 hover:after:opacity-100 hover:after:scale-x-100'}
+  `;
+
   return (
-    <div>
-      <nav className='px-6 py-4 border-b-2'>
-        <div className='flex flex-row justify-between items-center'>
-          <div className="flex items-center gap-1">
-            <img src="/logo.png" alt="Logo" className='w-8 h-8' />
-            <h3 className='font-bold'>
-              HR Science Quest
-            </h3>
-          </div>
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className={`fixed w-full top-0 z-50 transition-all duration-300 ${
+        isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md' : 'bg-white'
+      }`}
+    >
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='flex justify-between items-center h-16'>
+          <motion.div 
+            className="flex items-center gap-2"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Link to="/" className="flex items-center gap-2">
+              <motion.img 
+                src="/logo.png" 
+                alt="Logo" 
+                className='w-8 h-8'
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.5 }}
+              />
+              <h3 className='font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent'>
+                HR Science Quest
+              </h3>
+            </Link>
+          </motion.div>
 
-          {/* Hamburger Icon */}
-          <div className={`${isOpen ? "hidden" : "block"} lg:hidden`} onClick={toggleMenu}>
-            <FiAlignJustify size={24} />
-          </div>
-
-          <div className={`hidden lg:flex lg:flex-row gap-6 items-center`}>
-            <NavLink to="/" className='font-semibold hover:font-bold transition duration-600'>Home</NavLink>
-            <NavLink to="/notes" className='font-semibold hover:font-bold transition duration-600'>Notes</NavLink>
-            <NavLink to="/contact-us" className='font-semibold hover:font-bold transition duration-600'>Testimonals</NavLink>
-            <NavLink to="/about-us" className='font-semibold hover:font-bold transition duration-600'>About Us</NavLink>
-
-            <button 
+          {/* Desktop Navigation */}
+          <div className='hidden lg:flex items-center gap-8'>
+            {['/', '/notes', '/contact-us', '/about-us'].map((path) => (
+              <NavLink 
+                key={path} 
+                to={path} 
+                className={navLinkClass(path)}
+              >
+                {path === '/' ? 'Home' : 
+                 path.slice(1).split('-').map(word => 
+                   word.charAt(0).toUpperCase() + word.slice(1)
+                 ).join(' ')}
+              </NavLink>
+            ))}
+            
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={handleAuthAction}
-              className='bg-black text-white font-bold px-4 py-2 rounded-3xl hover:bg-gray-900 transition duration-300 hover:scale-105'
+              className='bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold 
+                       px-6 py-2 rounded-full hover:shadow-lg transition-all duration-300'
             >
               {isAuthenticated ? 'Logout' : 'Buy Notes'}
-            </button>
+            </motion.button>
           </div>
+
+          {/* Mobile menu button */}
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            className="lg:hidden"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <FiAlignJustify size={24} className={!isOpen ? "block" : "hidden"} />
+            <FiX size={24} className={isOpen ? "block" : "hidden"} />
+          </motion.button>
         </div>
-      </nav>
-
-      {/* Drawer */}
-      <div className={`${isOpen ? "translate-x-0" : "translate-x-full"} flex flex-col fixed top-0 right-0 h-full w-64 border-l-2 px-6 py-8 gap-6 bg-white lg:hidden transtion duration-300 ease-in-out z-50`}>
-        <FiX size={32} className='self-end' onClick={toggleMenu} />
-        <Link to="/" className='font-semibold hover:font-bold transition duration-600'>Home</Link>
-        <Link to="/Notes" className='font-semibold hover:font-bold transition duration-600'>Notes</Link>
-        <Link to="/contact-us" className='font-semibold hover:font-bold transition duration-600'>Testimonals</Link>
-        <Link to="/about-us" className='font-semibold hover:font-bold transition duration-600'>About Us</Link>
-
-        <button
-          onClick={handleAuthAction}
-          className='bg-black text-white font-bold px-4 py-2 rounded-3xl hover:bg-gray-900 transition duration-300 hover:scale-110'
-        >
-          {isAuthenticated ? 'Logout' : 'Buy Notes'}
-        </button>
       </div>
-    </div>
+
+      {/* Mobile Navigation */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden bg-white border-t"
+          >
+            <div className="px-4 pt-2 pb-4 space-y-4">
+              {['/', '/notes', '/contact-us', '/about-us'].map((path) => (
+                <motion.div
+                  key={path}
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <NavLink 
+                    to={path}
+                    onClick={() => setIsOpen(false)}
+                    className={`block py-2 ${navLinkClass(path)}`}
+                  >
+                    {path === '/' ? 'Home' : 
+                     path.slice(1).split('-').map(word => 
+                       word.charAt(0).toUpperCase() + word.slice(1)
+                     ).join(' ')}
+                  </NavLink>
+                </motion.div>
+              ))}
+              <motion.button
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+                onClick={() => {
+                  handleAuthAction();
+                  setIsOpen(false);
+                }}
+                className='w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white 
+                         font-bold py-2 rounded-full hover:shadow-lg transition-all duration-300'
+              >
+                {isAuthenticated ? 'Logout' : 'Buy Notes'}
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.nav>
   );
 }
