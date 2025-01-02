@@ -30,11 +30,9 @@ export function NavBar() {
       <nav className='px-6 py-4 border-b-2'>
         <div className='flex flex-row justify-between items-center'>
           <div className="flex items-center gap-1">
-            <svg className='size-4 ' viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fillRule="evenodd" clipRule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor"></path>
-            </svg>
+            <img src="/logo.png" alt="Logo" className='w-8 h-8' />
             <h3 className='font-bold'>
-              SchoolBuddy
+              HR Science Quest
             </h3>
           </div>
 
