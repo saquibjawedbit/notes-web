@@ -111,12 +111,12 @@ export function PrivacyPolicy() {
                         For any questions regarding this privacy policy or our data practices, please contact us at:
                         <br />
                         <motion.a 
-                            href="mailto:rasoolhashmat05@gmail.com" 
+                            href="mailto:HR@hrsciencequest.com" 
                             className="text-blue-600 hover:underline inline-block"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            rasoolhashmat05@gmail.com
+                            HR@hrsciencequest.com
                         </motion.a>
                     </p>
                 </motion.section>

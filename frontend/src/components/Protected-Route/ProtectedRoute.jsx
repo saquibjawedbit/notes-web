@@ -9,7 +9,7 @@ function ProtectedRoute() {
 
     if (loading) {
         return <div className='flex items-center justify-center h-[600px]'>
-            <ReactLoading type={'cubes'} color={'#000000'} height={'8%'} width={'8%'} />
+            <ReactLoading type={'cubes'} color={'#4B0082'} height={'8%'} width={'8%'}/>
         </div>
     }
 

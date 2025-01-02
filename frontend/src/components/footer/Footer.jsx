@@ -2,69 +2,49 @@ import React from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import {Link} from 'react-router-dom';
 
-
 export function Footer() {
   return (
-    <footer className="bg-black text-white py-6">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          {/* Left Section */}
-          <div className="text-center md:text-left mb-4 md:mb-0">
-            <h3 className="text-lg font-semibold">HR Science Quest</h3>
-            <p className="text-sm">© 2025 All Rights Reserved</p>
-          </div>
+    <footer className="bg-gradient-to-b from-blue-600 to-indigo-700 text-white py-8 border-t border-purple-700/30 shadow-xl">
+      <div className="container mx-auto px-6">
+        <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
+         { /* Left Section */}
+                <div className="text-center md:text-left">
+                <h3 className="text-xl font-bold">
+                  HR Science Quest
+                </h3>
+                <p className="text-purple-300 mt-2 text-sm">© 2025 All Rights Reserved</p>
+                </div>
 
-          {/* Center Section */}
-          <div className="flex space-x-4 text-sm">
-            <Link to="/privacy-policy" className="hover:text-gray-400 transition">
+                {/* Center Section */}
+          <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-6 text-sm">
+            <Link to="/privacy-policy" className="text-purple-200/90 hover:text-violet-300 transition-colors duration-300 relative group">
               Privacy Policy
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-violet-400 transition-all duration-300 group-hover:w-full"></span>
             </Link>
-            <Link to="/terms-of-service" className="hover:text-gray-400 transition">
+            <Link to="/terms-of-service" className="text-purple-200/90 hover:text-violet-300 transition-colors duration-300 relative group">
               Terms of Service
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-violet-400 transition-all duration-300 group-hover:w-full"></span>
             </Link>
-            <Link to="/contact-us" className="hover:text-gray-400 transition">
+            <Link to="/contact-us" className="text-purple-200/90 hover:text-violet-300 transition-colors duration-300 relative group">
               Contact Us
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-violet-400 transition-all duration-300 group-hover:w-full"></span>
             </Link>
           </div>
 
           {/* Social Media Section */}
-          <div className="flex mt-4 md:mt-0 space-x-5">
-            <a
-              href="https://www.facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook"
-              className="hover:text-gray-400 transition"
-            >
-              <i className="fab fa-facebook-f"></i>
-            </a>
-            <a
-              href="https://www.twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Twitter"
-              className="hover:text-gray-400 transition"
-            >
-              <i className="fab fa-twitter"></i>
-            </a>
-            <a
-              href="https://www.instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-              className="hover:text-gray-400 transition"
-            >
-              <i className="fab fa-instagram"></i>
-            </a>
-            <a
-              href="https://www.youtube.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="YouTube"
-              className="hover:text-gray-400 transition"
-            >
-              <i className="fab fa-youtube"></i>
-            </a>
+          <div className="flex space-x-6">
+            {['facebook-f', 'twitter', 'instagram', 'youtube'].map((platform) => (
+              <a
+                key={platform}
+                href={`https://www.${platform}.com`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={platform}
+                className="text-purple-200/80 hover:text-violet-300 transform hover:scale-110 transition-all duration-300"
+              >
+                <i className={`fab fa-${platform} text-xl`}></i>
+              </a>
+            ))}
           </div>
         </div>
       </div>

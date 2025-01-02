@@ -33,7 +33,7 @@ export default function Chapters() {
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen bg-gradient-to-b from-white via-blue-50 to-white py-12 px-4 sm:px-8"
+      className="min-h-screen bg-gradient-to-b from-white via-blue-50 to-white py-12 px-4 sm:px-8 pt-32"
     >
       <motion.div 
         initial={{ opacity: 0, y: -20 }}

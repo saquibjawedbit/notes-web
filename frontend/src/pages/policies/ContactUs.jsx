@@ -60,7 +60,7 @@ const ContactUs = () => {
               }}>
                 <EmailIcon sx={{ color: '#2563eb', fontSize: 32 }} />
                 <Link 
-                  href="mailto:hashmatrasool05@gmail.com" 
+                  href="mailto:HR@hrsciencequest.com" 
                   underline="none"
                   sx={{ 
                     color: '#2563eb',
@@ -71,7 +71,7 @@ const ContactUs = () => {
                     }
                   }}
                 >
-                  hashmatrasool05@gmail.com
+                  HR@hrsciencequest.com
                 </Link>
               </Box>
             </motion.div>

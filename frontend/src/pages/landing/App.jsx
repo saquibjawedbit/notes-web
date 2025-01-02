@@ -1,40 +1,69 @@
 import './App.css'
+import {Link, useNavigate} from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import { CallToActionButton } from '../../components/buttons/CallActionButton';
-import { CarousalElement } from '../../components/BoxDetail/CarousalElement';
 import { motion } from 'framer-motion';
+import { FaGraduationCap, FaUsers, FaChalkboardTeacher, FaMobileAlt, FaStar, FaQuoteLeft } from 'react-icons/fa';
 
 function App() {
 
-  const data = [
+  const navigate = useNavigate();
+
+  const features = [
     {
-      id: 0,
-      image: '/l2.png',
-      title: 'Daily live classes',
-      desc: 'Chat with educators, ask questions, answer live polls, and get your doubts cleared - all while the class is going on'
+      icon: <FaGraduationCap className="text-4xl text-blue-600" />,
+      title: "Expert Teachers",
+      description: "Learn from experienced educators who make complex topics easy to understand"
     },
     {
-      id: 1,
-      image: './l1.png' ,
-      title: 'Daily live classes',
-      desc: 'Chat with educators, ask questions, answer live polls, and get your doubts cleared - all while the class is going on'
+      icon: <FaUsers className="text-4xl text-purple-600" />,
+      title: "Interactive Learning",
+      description: "Engage with peers and teachers in an interactive learning environment"
     },
     {
-      id: 2,
-      image: './l3.png',
-      title: 'Daily live classes',
-      desc: 'Chat with educators, ask questions, answer live polls, and get your doubts cleared - all while the class is going on'
+      icon: <FaChalkboardTeacher className="text-4xl text-blue-600" />,
+      title: "Personalized Attention",
+      description: "Get individual attention and doubt resolution from our expert mentors"
+    },
+    {
+      icon: <FaMobileAlt className="text-4xl text-purple-600" />,
+      title: "Learn Anywhere",
+      description: "Access your courses anytime, anywhere with our mobile-friendly platform"
+    }
+  ];
+
+  const testimonials = [
+    {
+      name: "Sarah Johnson",
+      role: "Physics Student",
+      image: "https://randomuser.me/api/portraits/women/1.jpg",
+      text: "The interactive learning approach and detailed explanations have helped me understand complex physics concepts easily.",
+      rating: 5
+    },
+    {
+      name: "Mike Chen",
+      role: "Chemistry Student",
+      image: "https://randomuser.me/api/portraits/men/2.jpg",
+      text: "The quality of content and teaching methods are exceptional. My grades have improved significantly!",
+      rating: 5
+    },
+    {
+      name: "Emily Davis",
+      role: "Science Student",
+      image: "https://randomuser.me/api/portraits/women/3.jpg",
+      text: "The platform makes learning enjoyable. The teachers are knowledgeable and always ready to help.",
+      rating: 4
     }
   ];
 
   return (
-    <div className="container mx-auto px-4 bg-gradient-to-b from-white via-blue-50 to-white mt-32">
-      <section className='flex flex-col gap-y-36 lg:flex-row justify-center items-stretch h-auto w-full max-h-full py-32 lg:px-20 px-4'>
+    <div className="container mx-auto px-4 bg-gradient-to-b from-white via-blue-50 to-white mt-16">
+      <section className='flex flex-col gap-y-16 lg:flex-row justify-center items-stretch h-auto w-full max-h-full py-32 lg:px-20 px-4'>
         <motion.div 
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
-          className='flex flex-col w-full lg:w-1/2 gap-8 text-center lg:text-start'
+          className='flex flex-col w-full lg:w-1/2 gap-8 text-center lg:text-start mt-16'
         >
           <h1 className='text-5xl sm:text-6xl text-black font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text'>
             HR Science Quest<br />Learn Space
@@ -49,7 +78,9 @@ function App() {
             <motion.button 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className='bg-white text-black border-2 border-black font-bold px-12 py-4 rounded-3xl hover:bg-gray-100 transition duration-300 shadow-lg flex-1 max-w-48'
+              onClick={() => navigate('/notes')}
+              className='bg-white bg-gradient-to-r 
+                                          from-blue-600 to-purple-600 bg-clip-text text-transparent border-2 border-x-blue-600  border-y-purple-600 font-bold px-12 py-4 rounded-3xl hover:bg-gray-100 transition duration-300 shadow-lg flex-1 max-w-48'
             >
               Explore
             </motion.button>
@@ -59,28 +90,46 @@ function App() {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
-          className='w-full lg:w-1/2 flex justify-center items-center'
+          className='w-full lg:w-1/2 flex justify-center items-center lg:items-start'
         >
-          <img src="/hero_4.png" className='w-full max-h-96 object-contain hover:scale-105 transition-transform duration-300' alt="hero" />
+          <img src="/landing.png" className='w-full max-h-96 object-contain hover:scale-105 transition-transform duration-300' alt="hero" />
         </motion.div>
       </section>
 
+      {/* New Features Section */}
       <motion.section 
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className='w-full h-full flex gap-8 md:gap-6 justify-center items-center flex-col sm:flex-row px-16 py-20'
+        className="py-24 px-8"
       >
-        {data.map((value, index) => (
-          <motion.div
-            key={value.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.2 }}
-          >
-            <CarousalElement img={value.image} title={value.title} description={value.desc} />
-          </motion.div>
-        ))}
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+            Why Choose Us?
+          </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Discover the features that make our platform the perfect choice for your learning journey
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              whileHover={{ scale: 1.05 }}
+              className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              <div className="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
+                {feature.icon}
+              </div>
+              <h3 className="text-xl font-semibold text-center mb-2">{feature.title}</h3>
+              <p className="text-gray-600 text-center">{feature.description}</p>
+            </motion.div>
+          ))}
+        </div>
       </motion.section>
 
       <motion.section 
@@ -106,6 +155,58 @@ function App() {
           >
             <CallToActionButton title={"Learn"} />
           </motion.div>
+        </div>
+      </motion.section>
+
+      {/* New Testimonials Section */}
+      <motion.section
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="py-24 px-8 bg-white rounded-2xl shadow-lg my-16"
+      >
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+            What Our Students Say
+          </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Hear from our students about their learning experience
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {testimonials.map((testimonial, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.2 }}
+              className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+            >
+              <div className="flex items-center gap-4 mb-4">
+                <img
+                  src={testimonial.image}
+                  alt={testimonial.name}
+                  className="w-16 h-16 rounded-full object-cover border-2 border-blue-500"
+                />
+                <div>
+                  <h4 className="font-semibold text-lg">{testimonial.name}</h4>
+                  <p className="text-gray-600 text-sm">{testimonial.role}</p>
+                </div>
+              </div>
+              <div className="flex mb-4">
+                {[...Array(testimonial.rating)].map((_, i) => (
+                  <FaStar key={i} className="text-yellow-400" />
+                ))}
+              </div>
+              <div className="relative">
+                <FaQuoteLeft className="text-blue-200 text-4xl absolute -top-2 -left-2 opacity-50" />
+                <p className="text-gray-700 relative z-10 pl-6">
+                  "{testimonial.text}"
+                </p>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </motion.section>
     </div>

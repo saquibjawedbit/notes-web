@@ -149,12 +149,12 @@ export function TermsOfService() {
                     <p className="text-sm text-gray-600">
                         For questions about these terms, please contact{' '}
                         <motion.a 
-                            href="mailto:rasoolhashmat05@gmail.com" 
+                            href="mailto:HR@hrsciencequest.com" 
                             className="text-blue-600 hover:underline inline-block"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            rasoolhashmat05@gmail.com
+                           HR@hrsciencequest.com
                         </motion.a>
                     </p>
                     <p className="text-sm text-gray-500 mt-2">

@@ -56,7 +56,7 @@ export const emailTemplate = (otp) =>  `<!DOCTYPE html>
 <body>
     <div class="container">
         <div class="header">
-            <img src="https://example.com/logo.png" alt="Your Company Logo">
+            <h1>HR Science Quest</h1>
         </div>
         <div class="content">
             <h1>Your OTP Code</h1>
@@ -66,7 +66,7 @@ export const emailTemplate = (otp) =>  `<!DOCTYPE html>
             <p>If you did not request this OTP, please ignore this email.</p>
         </div>
         <div class="footer">
-            <p>&copy; 2024 Your Company. All rights reserved.</p>
+            <p>&copy; 2025 Your Company. All rights reserved.</p>
         </div>
     </div>
 </body>

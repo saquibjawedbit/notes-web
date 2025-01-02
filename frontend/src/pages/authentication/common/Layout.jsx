@@ -5,7 +5,7 @@ export function Layout() {
     return <>
         <div className="bg-slate-100 w-screen h-screen flex flex-col justify-center items-center">
             <div className="flex flex-col items-center">
-                <h1 className="text-3xl md:text-4xl font-bold mb-4">School Buddy</h1>
+                <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">HR Science Quest</h1>
                 <div className="flex flex-col sm:p-12 p-8 bg-white rounded-2xl items-center gap-4 shadow-lg">
                     <Outlet />
                 </div>
