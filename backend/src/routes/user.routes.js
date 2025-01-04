@@ -24,6 +24,11 @@ router.route("/reset-password").post(resetPassword);
 router.route("/forget-password").post(forgetPassword);
 router.route("/resend-otp").post(resendOTP);
 
+//Spins Up The Server (Bypass sleep)
+router.route("/start").get((req, res) => {
+    res.send("Hello World");
+});
+
 
 //secured routes
 router.route("/logout").post(verifyJWT ,logoutUser);
