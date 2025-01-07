@@ -21,8 +21,7 @@ const subjectVariants = {
 };
 
 export function Home() {
-    const [isOpen, setIsOpen] = useState(false);
-    const [category, setCategory] = useState("JEE");
+    const [category, setCategory] = useState("");
     const [subjects, setSubjects] = useState([]);
     const {user, loading, setUser} = useAuth();
     const [isLoadingSubjects, setIsLoadingSubjects] = useState(false);
@@ -32,6 +31,7 @@ export function Home() {
     }, [user]);
 
     useEffect(() => {
+        if(category === "") return;
        const loadData = async () => {
             setIsLoadingSubjects(true);
             try {
@@ -47,11 +47,8 @@ export function Home() {
             }
        };
        loadData();
+       updateClass();
     }, [category]);
-
-    const toggleDropdown = () => {
-        setIsOpen(!isOpen);
-    }
 
     const onDropDownClick = (index) => {
         if (index === 0) setCategory("JEE");
@@ -60,10 +57,15 @@ export function Home() {
         else if (index === 3) setCategory("XI");
         else if (index === 4) setCategory("X");
         else setCategory("IX");
-        toggleDropdown();
     }
 
     function DropDownButton() {
+        const [isOpen, setIsOpen] = useState(false);
+
+        const toggleDropdown = () => {
+            setIsOpen(!isOpen);
+        }
+
         return (
             <motion.div 
                 className="flex"
@@ -169,7 +171,6 @@ export function Home() {
                 "class" : category,
               });
             setUser((prev) => ({...prev, class: category}));
-            console.log("class updated");
         }
         catch(e) {
             console.log(e);
@@ -177,6 +178,75 @@ export function Home() {
     }   
 
     function AskSubject() {
+        const [isModalMounted, setIsModalMounted] = useState(false);
+        const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+        
+        useEffect(() => {
+            const timer = setTimeout(() => setIsModalMounted(true), 300);
+            return () => clearTimeout(timer);
+        }, []);
+
+        const handleDropdownSelect = (index) => {
+            const grades = ["JEE", "NEET", "XII", "XI", "X", "IX"];
+            setCategory(grades[index]);
+            setIsDropdownOpen(false);
+        };
+
+        function DropdownSelect() {
+            return (
+                <div className="relative">
+                    <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        className="flex justify-between items-center w-full bg-gradient-to-r from-blue-600 to-purple-600 
+                                 text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:shadow-lg 
+                                 transition-all duration-300"
+                    >
+                        <span className="text-lg">{category === "" ? "Select your Grade" : category}</span>
+                        <motion.svg
+                            animate={{ rotate: isDropdownOpen ? 180 : 0 }}
+                            transition={{ duration: 0.3 }}
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M5.23 7.21a.75.75 0 011.06.02L10 11.585l3.71-4.355a.75.75 0 111.14.976l-4 4.7a.75.75 0 01-1.14 0l-4-4.7a.75.75 0 01.02-1.06z"
+                                clipRule="evenodd"
+                            />
+                        </motion.svg>
+                    </motion.button>
+
+                    <AnimatePresence>
+                        {isDropdownOpen && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.2 }}
+                                className="absolute left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50"
+                            >
+                                {["JEE", "NEET", "XII", "XI", "X", "IX"].map((item, index) => (
+                                    <motion.button
+                                        key={item}
+                                        whileHover={{ backgroundColor: "#f3f4f6" }}
+                                        onClick={() => handleDropdownSelect(index)}
+                                        className="flex w-full px-6 py-3 text-gray-700 hover:bg-gray-50 
+                                                 border-b last:border-none transition-colors duration-200"
+                                    >
+                                        {item}
+                                    </motion.button>
+                                ))}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+            );
+        }
+
         return (
             <motion.div
                 initial={{ opacity: 0 }}
@@ -185,9 +255,8 @@ export function Home() {
                 className="fixed flex justify-center items-center inset-0 h-screen bg-black/60 backdrop-blur-sm z-50"
             >
                 <motion.div
-                    initial={{ scale: 0.5, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.5, opacity: 0 }}
+                    initial={!isModalMounted ? { scale: 0.5, opacity: 0 } : false}
+                    animate={!isModalMounted ? { scale: 1, opacity: 1 } : false}
                     transition={{ duration: 0.3 }}
                     className="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full mx-4 relative"
                 >
@@ -199,63 +268,17 @@ export function Home() {
                     </div>
 
                     <div className="space-y-6">
-                        <div className="relative">
-                            <motion.button
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                onClick={toggleDropdown}
-                                className="flex justify-between items-center w-full bg-gradient-to-r from-blue-600 to-purple-600 
-                                         text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:shadow-lg 
-                                         transition-all duration-300"
-                            >
-                                <span className="text-lg">{category}</span>
-                                <motion.svg
-                                    animate={{ rotate: isOpen ? 180 : 0 }}
-                                    transition={{ duration: 0.3 }}
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-5 w-5"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M5.23 7.21a.75.75 0 011.06.02L10 11.585l3.71-4.355a.75.75 0 111.14.976l-4 4.7a.75.75 0 01-1.14 0l-4-4.7a.75.75 0 01.02-1.06z"
-                                        clipRule="evenodd"
-                                    />
-                                </motion.svg>
-                            </motion.button>
-
-                            <AnimatePresence>
-                                {isOpen && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: -10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -10 }}
-                                        className="absolute left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50"
-                                    >
-                                        {["JEE", "NEET", "XII", "XI", "X", "IX"].map((item, index) => (
-                                            <motion.button
-                                                key={item}
-                                                whileHover={{ backgroundColor: "#f3f4f6" }}
-                                                onClick={() => onDropDownClick(index)}
-                                                className="flex w-full px-6 py-3 text-gray-700 hover:bg-gray-50 
-                                                         border-b last:border-none transition-colors duration-200"
-                                            >
-                                                {item}
-                                            </motion.button>
-                                        ))}
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
+                        <DropdownSelect />
 
                         <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={updateClass}
-                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white 
+                            disabled={category === ""}
+                            className={`w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white 
                                      font-semibold py-3 px-6 rounded-xl shadow-md hover:shadow-lg 
-                                     transition-all duration-300 text-lg"
+                                     transition-all duration-300 text-lg
+                                     ${category === "" ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             Continue
                         </motion.button>
@@ -333,7 +356,7 @@ export function Home() {
                             className="flex flex-col items-center justify-center h-[400px] text-center"
                             variants={subjectVariants}
                         >
-                            <img src="/empty-state.svg" alt="No subjects" className="w-48 h-48 mb-4 opacity-50" />
+                            <img src="/empty-state.png" alt="No subjects" className="w-48 h-48 mb-4 opacity-50" />
                             <h3 className="text-xl font-semibold text-gray-700">No subjects found</h3>
                             <p className="text-gray-500">Please try selecting a different category</p>
                         </motion.div>

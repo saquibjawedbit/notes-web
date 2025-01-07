@@ -32,11 +32,6 @@ const getSubject = asyncHandler(async (req, res) => {
         { $limit: 20 }
     ]);
 
-    // No Subject with this name exists
-    if(subjects.length == 0) {
-        throw new ApiError(404, "Grade with this name does not exist")
-    }
-
     return res.status(200)
     .json(
         new ApiResponse(200, subjects, "Subject Fetched Successfully"),
