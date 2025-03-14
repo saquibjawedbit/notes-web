@@ -107,16 +107,19 @@ const readNote = asyncHandler(async (req, res) => {
         if(!isPurchased) {
             throw new ApiError(401, "Protected Content");
         }
-
+        
         // Search for transaction
-        const transaction = await Transaction.findOne({noteId: id, userId: user._id}).select("status");
+        const transaction = await Transaction.findOne({noteId: id, userId: user._id.toString()}).select("status");
+        
+        if(transaction == null) {
+            throw new ApiError(401, "Protected Content");
+        }
 
         if(transaction.status != "authorized") {
             throw new ApiError(401, "Protected Content");
         }
 
         const noteObject = await Note.findById(id).select("pdfFile");
-
         const pdfUrl = noteObject.pdfFile;
         const response = await axios.get(pdfUrl, {
             responseType: 'stream',

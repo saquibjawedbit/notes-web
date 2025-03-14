@@ -20,23 +20,17 @@ const subjectVariants = {
   visible: { opacity: 1, y: 0 }
 };
 
-export function Home() {
-    const [category, setCategory] = useState("");
+function SubjectsGrid({ category }) {
     const [subjects, setSubjects] = useState([]);
-    const {user, loading, setUser} = useAuth();
     const [isLoadingSubjects, setIsLoadingSubjects] = useState(false);
 
     useEffect(() => {
-        if(user != null) setCategory(user.class);
-    }, [user]);
-
-    useEffect(() => {
         if(category === "") return;
-       const loadData = async () => {
+        const loadData = async () => {
             setIsLoadingSubjects(true);
             try {
-                const respone = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/subjects/${category}`);
-                const subjects = respone.data.data;
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/subjects/${category}`);
+                const subjects = response.data.data;
                 setSubjects(subjects);
             }
             catch(e) {
@@ -45,9 +39,109 @@ export function Home() {
             finally {
                 setIsLoadingSubjects(false);
             }
-       };
-       loadData();
-       updateClass();
+        };
+        loadData();
+    }, [category]);
+
+    function Subject({ title, chapter, icon }) {
+        return (
+            <motion.div
+                variants={subjectVariants}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
+            >
+                <Link 
+                    to={`${category}/${title}`} 
+                    className="block h-full bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl 
+                             transition-all duration-300 transform"
+                >
+                    <div className="p-6 flex flex-col items-center gap-4">
+                        <motion.div
+                            whileHover={{ rotate: [0, -5, 5, -5, 0] }}
+                            transition={{ duration: 0.5 }}
+                            className="relative w-40 h-40"
+                        >
+                            <motion.img 
+                                src={icon} 
+                                alt={title}
+                                className="w-full h-full object-contain"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.3 }}
+                            />
+                        </motion.div>
+                        <div className="text-center">
+                            <h3 className="text-xl font-semibold text-gray-800 mb-1">{title}</h3>
+                            <p className="text-gray-600">{chapter} Chapters</p>
+                        </div>
+                    </div>
+                </Link>
+            </motion.div>
+        );
+    }
+
+    return (
+        <motion.div 
+            className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
+            <motion.div 
+                className="bg-white rounded-2xl shadow-lg p-8 relative min-h-[500px]"
+                variants={subjectVariants}
+            >
+                {isLoadingSubjects ? (
+                    <motion.div 
+                        className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm rounded-2xl"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                    >
+                        <div className="flex flex-col items-center gap-4">
+                            <ReactLoading type="bubbles" color="#4F46E5" height={64} width={64} />
+                            <p className="text-gray-600 text-lg font-medium">Loading subjects...</p>
+                        </div>
+                    </motion.div>
+                ) : subjects.length === 0 ? (
+                    <motion.div 
+                        className="flex flex-col items-center justify-center h-[400px] text-center"
+                        variants={subjectVariants}
+                    >
+                        <img src="/empty-state.png" alt="No subjects" className="w-48 h-48 mb-4 opacity-50" />
+                        <h3 className="text-xl font-semibold text-gray-700">No subjects found</h3>
+                        <p className="text-gray-500">Please try selecting a different category</p>
+                    </motion.div>
+                ) : (
+                    <motion.div 
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                        variants={containerVariants}
+                    >
+                        {subjects.map((element) => (
+                            <Subject 
+                                key={element._id} 
+                                title={element.name} 
+                                chapter={element.chaptersCount} 
+                                icon={element.thumbnail} 
+                            />
+                        ))}
+                    </motion.div>
+                )}
+            </motion.div>
+        </motion.div>
+    );
+}
+
+export function Home() {
+    const [category, setCategory] = useState("");
+    const {user, loading, setUser} = useAuth();
+
+    useEffect(() => {
+        if(user != null) setCategory(user.class);
+    }, [user]);
+
+    useEffect(() => {
+        if(category === "") return;
+        updateClass();
     }, [category]);
 
     const onDropDownClick = (index) => {
@@ -123,43 +217,6 @@ export function Home() {
                         )}
                     </AnimatePresence>
                 </div>
-            </motion.div>
-        );
-    }
-
-    function Subject({ title, chapter, icon }) {
-        return (
-            <motion.div
-                variants={subjectVariants}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-            >
-                <Link 
-                    to={`${category}/${title}`} 
-                    className="block h-full bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl 
-                             transition-all duration-300 transform"
-                >
-                    <div className="p-6 flex flex-col items-center gap-4">
-                        <motion.div
-                            whileHover={{ rotate: [0, -5, 5, -5, 0] }}
-                            transition={{ duration: 0.5 }}
-                            className="relative w-40 h-40"
-                        >
-                            <motion.img 
-                                src={icon} 
-                                alt={title}
-                                className="w-full h-full object-contain"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.3 }}
-                            />
-                        </motion.div>
-                        <div className="text-center">
-                            <h3 className="text-xl font-semibold text-gray-800 mb-1">{title}</h3>
-                            <p className="text-gray-600">{chapter} Chapters</p>
-                        </div>
-                    </div>
-                </Link>
             </motion.div>
         );
     }
@@ -330,53 +387,7 @@ export function Home() {
             </motion.div>
 
             {/* Main Content */}
-            <motion.div 
-                className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-            >
-                <motion.div 
-                    className="bg-white rounded-2xl shadow-lg p-8 relative min-h-[500px]"
-                    variants={subjectVariants}
-                >
-                    {isLoadingSubjects ? (
-                        <motion.div 
-                            className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm rounded-2xl"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                        >
-                            <div className="flex flex-col items-center gap-4">
-                                <ReactLoading type="bubbles" color="#4F46E5" height={64} width={64} />
-                                <p className="text-gray-600 text-lg font-medium">Loading subjects...</p>
-                            </div>
-                        </motion.div>
-                    ) : subjects.length === 0 ? (
-                        <motion.div 
-                            className="flex flex-col items-center justify-center h-[400px] text-center"
-                            variants={subjectVariants}
-                        >
-                            <img src="/empty-state.png" alt="No subjects" className="w-48 h-48 mb-4 opacity-50" />
-                            <h3 className="text-xl font-semibold text-gray-700">No subjects found</h3>
-                            <p className="text-gray-500">Please try selecting a different category</p>
-                        </motion.div>
-                    ) : (
-                        <motion.div 
-                            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-                            variants={containerVariants}
-                        >
-                            {subjects.map((element) => (
-                                <Subject 
-                                    key={element._id} 
-                                    title={element.name} 
-                                    chapter={element.chaptersCount} 
-                                    icon={element.thumbnail} 
-                                />
-                            ))}
-                        </motion.div>
-                    )}
-                </motion.div>
-            </motion.div>
+            <SubjectsGrid category={category} />
 
             {/* Class Selection Modal */}
             <AnimatePresence>
