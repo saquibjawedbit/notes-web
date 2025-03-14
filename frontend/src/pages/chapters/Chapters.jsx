@@ -33,7 +33,7 @@ export default function Chapters() {
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen bg-gradient-to-b from-white via-blue-50 to-white py-12 px-4 sm:px-8 pt-32"
+      className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 py-12 px-4 sm:px-8 pt-32"
     >
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
@@ -41,12 +41,12 @@ export default function Chapters() {
         className="max-w-7xl mx-auto"
       >
         <motion.h1 
-          className='text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text mb-2'
+          className='text-5xl font-bold bg-gradient-to-r from-amber-400 to-yellow-600 text-transparent bg-clip-text mb-2'
         >
           {chapter} Notes
         </motion.h1>
         <motion.p 
-          className="text-gray-600 text-lg mb-8"
+          className="text-amber-200/80 text-lg mb-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -74,17 +74,17 @@ export default function Chapters() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
-              <ReactLoading type="bubbles" color="#4F46E5" height={80} width={80} />
-              <p className="text-gray-600 text-lg">Loading your study materials...</p>
+              <ReactLoading type="bubbles" color="#F59E0B" height={80} width={80} />
+              <p className="text-amber-200/80 text-lg">Loading your study materials...</p>
             </motion.div>
           ) : chapterList.length === 0 ? (
             <motion.div 
-              className="text-center py-12 bg-white rounded-2xl shadow-sm"
+              className="text-center py-12 bg-gray-900 rounded-2xl shadow-sm border border-amber-700/20"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
             >
               <img src="/empty-state.svg" alt="No content" className="w-48 h-48 mx-auto mb-4" />
-              <p className="text-gray-500 text-lg">No chapters found for this subject</p>
+              <p className="text-amber-200/80 text-lg">No chapters found for this subject</p>
             </motion.div>
           ) : (
             chapterList.map((ch, index) => (

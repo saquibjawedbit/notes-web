@@ -43,7 +43,7 @@ function ItemVeiw() {
               email: user.email,
             },
             theme: {
-              color: '#F37254'
+              color: '#F59E0B'  // Changed to amber color
             },
           };
           const rzp = new Razorpay(options);
@@ -60,7 +60,7 @@ function ItemVeiw() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 min-h-screen flex items-center justify-center z-50"
             style={{
-                background: 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8))',
+                background: 'linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9))',
                 backdropFilter: 'blur(8px)'
             }}
         >
@@ -68,7 +68,7 @@ function ItemVeiw() {
                 initial={{ scale: 0.9, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.9, y: 20 }}
-                className="relative max-w-5xl w-[95%] mx-4 bg-white rounded-2xl overflow-hidden shadow-2xl"
+                className="relative max-w-5xl w-[95%] mx-4 bg-gray-900 rounded-2xl overflow-hidden shadow-2xl border border-amber-700/20"
             >
                 {/* Header with back button */}
                 <motion.div 
@@ -78,9 +78,9 @@ function ItemVeiw() {
                 >
                     <button
                         onClick={() => navigate(-1)}
-                        className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 transition-colors"
+                        className="bg-black p-2 rounded-full shadow-lg hover:bg-gray-800 transition-colors border border-amber-700/20"
                     >
-                        <img src="/back.svg" alt="Back" className="w-6 h-6" />
+                        <img src="/back.svg" alt="Back" className="w-6 h-6 invert" />
                     </button>
                 </motion.div>
 
@@ -91,7 +91,7 @@ function ItemVeiw() {
                         animate={{ opacity: 1, x: 0 }}
                         className="flex flex-col gap-4"
                     >
-                        <div className="relative aspect-[3/4] rounded-xl overflow-hidden shadow-lg">
+                        <div className="relative aspect-[3/4] rounded-xl overflow-hidden shadow-lg border border-amber-700/20">
                             <motion.img
                                 src={item.thumbnail}
                                 alt={item.title}
@@ -99,7 +99,7 @@ function ItemVeiw() {
                                 whileHover={{ scale: 1.05 }}
                                 transition={{ duration: 0.3 }}
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                         </div>
                     </motion.div>
 
@@ -111,7 +111,7 @@ function ItemVeiw() {
                     >
                         <div className="space-y-6">
                             <motion.h1 
-                                className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+                                className="text-4xl font-bold bg-gradient-to-r from-amber-400 to-yellow-600 bg-clip-text text-transparent"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                             >
@@ -125,14 +125,14 @@ function ItemVeiw() {
                                     animate={{ opacity: 1 }}
                                     transition={{ delay: 0.2 }}
                                 >
-                                    <span className="text-3xl font-bold text-green-600">₹{item.price}</span>
-                                    <span className="text-sm text-gray-500 bg-green-50 px-2 py-1 rounded-full">
+                                    <span className="text-3xl font-bold text-amber-500">₹{item.price}</span>
+                                    <span className="text-sm text-amber-100/70 bg-amber-900/30 px-2 py-1 rounded-full">
                                         One-time payment
                                     </span>
                                 </motion.div>
 
                                 <motion.p 
-                                    className="text-gray-600 leading-relaxed text-lg"
+                                    className="text-gray-300 leading-relaxed text-lg"
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{ delay: 0.3 }}
@@ -148,16 +148,16 @@ function ItemVeiw() {
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.4 }}
                             >
-                                <h3 className="font-semibold text-lg">What you'll get:</h3>
-                                <ul className="space-y-2">
+                                <h3 className="font-semibold text-lg text-amber-200">What you'll get:</h3>
+                                <ul className="space-y-2 text-gray-300">
                                     <li className="flex items-center gap-2">
-                                        <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                                         </svg>
                                         Lifetime access to content
                                     </li>
                                     <li className="flex items-center gap-2">
-                                        <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                                         </svg>
                                         High-quality study materials
@@ -168,9 +168,9 @@ function ItemVeiw() {
                         </div>
 
                         <motion.button
-                            className="mt-8 w-full py-4 rounded-xl text-white text-xl font-bold
-                                     bg-gradient-to-r from-blue-600 to-purple-600 
-                                     hover:from-blue-700 hover:to-purple-700
+                            className="mt-8 w-full py-4 rounded-xl text-black text-xl font-bold
+                                     bg-gradient-to-r from-amber-400 to-yellow-600 
+                                     hover:from-amber-500 hover:to-yellow-700
                                      shadow-lg hover:shadow-xl
                                      transition-all duration-300"
                             onClick={(e) => {e.preventDefault(); payNow();}}

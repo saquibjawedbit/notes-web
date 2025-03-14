@@ -55,31 +55,31 @@ export function Card({ index, name, len, subject, chapter }) {
             <motion.div
                 whileHover={{ scale: 1.02, y: -5 }}
                 whileTap={{ scale: 0.98 }}
-                className='bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300
-                          border border-gray-100'
+                className='bg-gray-900 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300
+                          border border-amber-700/20'
             >
                 <div
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={() => setIsHovered(false)}
                     onClick={() => setOpen(!open)}
-                    className='flex flex-col bg-gradient-to-r from-white to-blue-50/30 items-center 
+                    className='flex flex-col bg-gradient-to-r from-gray-900 to-black/70 items-center 
                              justify-start lg:px-24 py-12 rounded-xl cursor-pointer relative'
                 >
                     <div className='flex justify-between w-full px-8 items-center'>
                         <div className="flex flex-col gap-2">
                             <motion.h3 
                                 className='font-bold text-2xl sm:text-3xl bg-gradient-to-r 
-                                          from-blue-600 to-purple-600 bg-clip-text text-transparent'
+                                          from-amber-400 to-yellow-600 bg-clip-text text-transparent'
                             >
                                 Module {index + 1}
                             </motion.h3>
-                            <motion.h4 className='font-semibold text-lg sm:text-xl text-gray-700'>
+                            <motion.h4 className='font-semibold text-lg sm:text-xl text-amber-200'>
                                 {name}
                             </motion.h4>
                         </div>
                         <div className="flex flex-col items-end">
-                            <span className='text-xl font-bold text-gray-900'>{len}</span>
-                            <span className='text-sm text-gray-500'>Notes</span>
+                            <span className='text-xl font-bold text-amber-400'>{len}</span>
+                            <span className='text-sm text-amber-200/70'>Notes</span>
                         </div>
                     </div>
 
@@ -92,7 +92,7 @@ export function Card({ index, name, len, subject, chapter }) {
                                 exit={{ opacity: 0 }}
                                 className="absolute right-4 top-1/2 -translate-y-1/2"
                             >
-                                <ReactLoading type="bubbles" color="#4F46E5" height={24} width={24} />
+                                <ReactLoading type="bubbles" color="#F59E0B" height={24} width={24} />
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -103,7 +103,7 @@ export function Card({ index, name, len, subject, chapter }) {
                         className="absolute bottom-4 right-4"
                     >
                         <svg 
-                            className="w-5 h-5 text-gray-400" 
+                            className="w-5 h-5 text-amber-400" 
                             fill="none" 
                             stroke="currentColor" 
                             viewBox="0 0 24 24"
@@ -125,8 +125,8 @@ export function Card({ index, name, len, subject, chapter }) {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="mt-2 bg-gradient-to-r from-blue-50/50 to-purple-50/50 
-                                 rounded-xl overflow-hidden shadow-inner"
+                        className="mt-2 bg-gradient-to-r from-gray-900 to-black/80 
+                                 rounded-xl overflow-hidden shadow-inner border border-amber-700/10"
                     >
                         <motion.div 
                             className="p-4 space-y-2"

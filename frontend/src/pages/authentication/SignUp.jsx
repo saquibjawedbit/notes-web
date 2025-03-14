@@ -116,9 +116,9 @@ export function SignUp() {
     };
 
     return (
-        <div className="h-[400px] flex items-center justify-center bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
-                <h2 className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <div className="h-[400px] flex items-center justify-center bg-gray-900 py-6 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-md w-full space-y-8 bg-black p-8 rounded-xl shadow-lg border border-amber-500/20">
+                <h2 className="text-3xl font-extrabold text-center bg-gradient-to-r from-yellow-500 to-amber-300 bg-clip-text text-transparent">
                     Create Account
                 </h2>
                 {!otpScreen ? (
@@ -126,7 +126,7 @@ export function SignUp() {
                         <form className="mt-8 space-y-6" onSubmit={onSubmit}>
                             <div className="rounded-md shadow-sm -space-y-px">
                                 <div className="mb-4">
-                                    <label htmlFor="emailId" className="block text-sm font-medium text-gray-700">
+                                    <label htmlFor="emailId" className="block text-sm font-medium text-gray-300">
                                         Email
                                     </label>
                                     <input
@@ -136,12 +136,12 @@ export function SignUp() {
                                         value={credential.emailId}
                                         onChange={handleChange}
                                         required
-                                        className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                                        className="appearance-none relative block w-full px-3 py-2 border border-gray-600 bg-gray-800 placeholder-gray-400 text-gray-200 rounded-lg focus:outline-none focus:ring-amber-500 focus:border-amber-500 focus:z-10 sm:text-sm"
                                     />
                                 </div>
 
                                 <div className="mb-4">
-                                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                                    <label htmlFor="password" className="block text-sm font-medium text-gray-300">
                                         Password
                                     </label>
                                     <div className="relative">
@@ -153,12 +153,12 @@ export function SignUp() {
                                             onChange={handleChange}
                                             minLength={6}
                                             required
-                                            className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                                            className="appearance-none relative block w-full px-3 py-2 border border-gray-600 bg-gray-800 placeholder-gray-400 text-gray-200 rounded-lg focus:outline-none focus:ring-amber-500 focus:border-amber-500 focus:z-10 sm:text-sm"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400"
                                         >
                                             {showPassword ? <FaEyeSlash /> : <FaEye />}
                                         </button>
@@ -195,7 +195,7 @@ export function SignUp() {
                                 <div className="mb-4">
                                     <label
                                         htmlFor="confirmPassword"
-                                        className="block text-sm font-medium text-gray-700"
+                                        className="block text-sm font-medium text-gray-300"
                                     >
                                         Confirm Password
                                     </label>
@@ -207,7 +207,7 @@ export function SignUp() {
                                         onChange={handleChange}
                                         minLength={6}
                                         required
-                                        className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                                        className="appearance-none relative block w-full px-3 py-2 border border-gray-600 bg-gray-800 placeholder-gray-400 text-gray-200 rounded-lg focus:outline-none focus:ring-amber-500 focus:border-amber-500 focus:z-10 sm:text-sm"
                                     />
                                 </div>
                             </div>
@@ -219,11 +219,11 @@ export function SignUp() {
                                     type="checkbox"
                                     checked={acceptTerms}
                                     onChange={(e) => setAcceptTerms(e.target.checked)}
-                                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                    className="h-4 w-4 text-amber-500 focus:ring-amber-500 border-gray-600 rounded"
                                 />
-                                <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
+                                <label htmlFor="terms" className="ml-2 block text-sm text-gray-300">
                                     I accept the{' '}
-                                    <a href="/terms" className="text-blue-600 hover:text-blue-500">
+                                    <a href="/terms" className="text-amber-500 hover:text-amber-400">
                                         Terms and Conditions
                                     </a>
                                 </label>
@@ -238,11 +238,11 @@ export function SignUp() {
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-black bg-gradient-to-r from-yellow-500 to-amber-300 hover:from-yellow-600 hover:to-amber-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
                             >
                                 {isLoading ? (
                                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                                        <ReactLoading type="spin" color="#ffffff" height={20} width={20} />
+                                        <ReactLoading type="spin" color="#000000" height={20} width={20} />
                                     </div>
                                 ) : (
                                     'Create Account'
@@ -251,9 +251,9 @@ export function SignUp() {
                         </form>
 
                         <div className="mt-4 text-center">
-                            <p className="text-sm text-gray-600">
+                            <p className="text-sm text-gray-400">
                                 Already have an account?{' '}
-                                <Link className="font-medium text-blue-600 hover:text-blue-500" to="/login">
+                                <Link className="font-medium text-amber-500 hover:text-amber-400" to="/login">
                                     Login
                                 </Link>
                             </p>
