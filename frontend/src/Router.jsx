@@ -20,6 +20,7 @@ import {PrivacyPolicy} from './pages/policies/PrivacyPolicy.jsx';
 import { TermsOfService } from './pages/policies/TermsOfService.jsx';
 import ContactUs from './pages/policies/ContactUs.jsx';
 import { ItemVeiw } from './components/card/ItemView.jsx';
+import TestimonialsManagement from './pages/admin/TestimonialsManagement.jsx';
 
 
 export default function Router() {
@@ -59,6 +60,7 @@ export default function Router() {
               <Route path='subjects' element={<EditPage />} />
               <Route path='edit-note/:noteId' element={<EditNote/>}/>
               <Route path='create-note/:subjectId/:chapterIndex' element={<CreateNote />}/>
+              <Route path='testimonials' element={<TestimonialsManagement />} />
         </Route>
 
       </Routes>

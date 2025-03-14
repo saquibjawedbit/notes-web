@@ -5,11 +5,23 @@ import { CallToActionButton } from '../../components/buttons/CallActionButton';
 import { motion } from 'framer-motion';
 import { FaGraduationCap, FaUsers, FaChalkboardTeacher, FaMobileAlt, FaStar, FaQuoteLeft, FaPlay } from 'react-icons/fa';
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function App() {
   const navigate = useNavigate();
   const [showVideo, setShowVideo] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [testimonials, setTestimonials] = useState([]);
+
+  useEffect(() => {
+    axios.get('/api/v1/testimonials')
+      .then(response => {
+        setTestimonials(response.data.data);
+      })
+      .catch(error => {
+        console.error('Error fetching testimonials:', error);
+      });
+  }, []);
 
   const features = [
     {
@@ -31,30 +43,6 @@ function App() {
       icon: <FaMobileAlt className="text-4xl" />,
       title: "Learn Anywhere",
       description: "Access your courses anytime, anywhere with our mobile-friendly platform"
-    }
-  ];
-
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      role: "Physics Student",
-      image: "https://randomuser.me/api/portraits/women/1.jpg",
-      text: "The interactive learning approach and detailed explanations have helped me understand complex physics concepts easily.",
-      rating: 5
-    },
-    {
-      name: "Mike Chen",
-      role: "Chemistry Student",
-      image: "https://randomuser.me/api/portraits/men/2.jpg",
-      text: "The quality of content and teaching methods are exceptional. My grades have improved significantly!",
-      rating: 5
-    },
-    {
-      name: "Emily Davis",
-      role: "Science Student",
-      image: "https://randomuser.me/api/portraits/women/3.jpg",
-      text: "The platform makes learning enjoyable. The teachers are knowledgeable and always ready to help.",
-      rating: 4
     }
   ];
 
@@ -209,11 +197,14 @@ function App() {
                     <FaStar key={i} className="text-amber-400" />
                   ))}
                 </div>
-                <div className="relative">
+                <div className="relative mb-4">
                   <FaQuoteLeft className="text-amber-500/30 text-4xl absolute -top-2 -left-2 opacity-50" />
                   <p className="text-gray-300 relative z-10 pl-6">
                     "{testimonial.text}"
                   </p>
+                </div>
+                <div className="rounded-xl overflow-hidden shadow-2xl">
+                  <ReactPlayer url={testimonial.video} width={"100%"} controls />
                 </div>
               </motion.div>
             ))}
