@@ -71,8 +71,6 @@ export default function TestimonialForm({ initialData, onSubmit, onCancel }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
-            // In a real application, you'd handle file upload here
-            // For this example, we'll just pass the form data
             onSubmit(formData);
         }
     };

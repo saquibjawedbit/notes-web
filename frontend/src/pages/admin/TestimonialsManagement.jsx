@@ -19,7 +19,7 @@ export default function TestimonialsManagement() {
         try {
             setLoading(true);
             const response = await axios.get('/api/v1/testimonials');
-            setTestimonials(response.data);
+            setTestimonials(response.data.data);
             setLoading(false);
         } catch (err) {
             console.error('Error fetching testimonials:', err);
@@ -54,11 +54,27 @@ export default function TestimonialsManagement() {
 
     const handleFormSubmit = async (formData) => {
         try {
+            const formDataToSend = new FormData(); // Create a new FormData object
+            formDataToSend.append("image", formData.image); // Append the image file
+            formDataToSend.append("name", formData.name);
+            formDataToSend.append("text", formData.text);
+            formDataToSend.append("role", formData.role);
+            formDataToSend.append("rating", formData.rating);
+            formDataToSend.append("video", formData.video);
+
+
             if (isEditing) {
-                await axios.put(`/api/v1/testimonials/${selectedTestimonial._id}`, formData);
+                await axios.put(`/api/v1/testimonials/${selectedTestimonial._id}`, formDataToSend, {
+                    headers: {
+                        "Content-Type": "multipart/form-data", // Set proper headers
+                    },
+                });
             } else {
-                console.log('formData:', formData);
-                await axios.post('/api/v1/testimonials', formData);
+                await axios.post("/api/v1/testimonials", formDataToSend, {
+                    headers: {
+                        "Content-Type": "multipart/form-data", // Set proper headers
+                    },
+                });
             }
             fetchTestimonials();
             handleFormClose();
@@ -80,8 +96,8 @@ export default function TestimonialsManagement() {
         <div className="container mx-auto p-6">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-3xl font-bold">Testimonials Management</h1>
-                <button 
-                    onClick={() => setShowForm(true)} 
+                <button
+                    onClick={() => setShowForm(true)}
                     className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
                 >
                     Add New Testimonial
@@ -101,7 +117,7 @@ export default function TestimonialsManagement() {
                             <h2 className="text-2xl font-bold">
                                 {isEditing ? 'Edit Testimonial' : 'Add New Testimonial'}
                             </h2>
-                            <button 
+                            <button
                                 onClick={handleFormClose}
                                 className="text-gray-500 hover:text-gray-700"
                             >
@@ -110,9 +126,9 @@ export default function TestimonialsManagement() {
                                 </svg>
                             </button>
                         </div>
-                        <TestimonialForm 
-                            initialData={selectedTestimonial} 
-                            onSubmit={handleFormSubmit} 
+                        <TestimonialForm
+                            initialData={selectedTestimonial}
+                            onSubmit={handleFormSubmit}
                             onCancel={handleFormClose}
                         />
                     </div>
@@ -124,9 +140,9 @@ export default function TestimonialsManagement() {
                     testimonials.map(testimonial => (
                         <div key={testimonial._id} className="border rounded-lg overflow-hidden shadow-lg">
                             <div className="relative h-48 overflow-hidden">
-                                <img 
-                                    src={testimonial.image} 
-                                    alt={testimonial.name} 
+                                <img
+                                    src={testimonial.image}
+                                    alt={testimonial.name}
                                     className="w-full h-full object-cover"
                                 />
                             </div>
@@ -135,7 +151,7 @@ export default function TestimonialsManagement() {
                                     <h3 className="text-xl font-semibold">{testimonial.name}</h3>
                                     <div className="flex items-center">
                                         {[...Array(5)].map((_, i) => (
-                                            <svg 
+                                            <svg
                                                 key={i}
                                                 className={`w-5 h-5 ${i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'}`}
                                                 fill="currentColor"
@@ -150,9 +166,9 @@ export default function TestimonialsManagement() {
                                 <p className="text-gray-800 mb-4 line-clamp-3">{testimonial.text}</p>
                                 {testimonial.video && (
                                     <div className="mb-4">
-                                        <a 
-                                            href={testimonial.video} 
-                                            target="_blank" 
+                                        <a
+                                            href={testimonial.video}
+                                            target="_blank"
                                             rel="noopener noreferrer"
                                             className="text-blue-600 hover:underline flex items-center"
                                         >
@@ -165,13 +181,13 @@ export default function TestimonialsManagement() {
                                     </div>
                                 )}
                                 <div className="flex justify-end space-x-2 mt-2">
-                                    <button 
+                                    <button
                                         onClick={() => handleEdit(testimonial)}
                                         className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded"
                                     >
                                         Edit
                                     </button>
-                                    <button 
+                                    <button
                                         onClick={() => handleDelete(testimonial._id)}
                                         className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded"
                                     >

@@ -2,7 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { Testimonial } from "../models/testimonial.model.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { deleteFromCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const getTestimonials = asyncHandler(async (req, res) => {
     const testimonials = await Testimonial.find();
@@ -17,36 +17,26 @@ const getTestimonials = asyncHandler(async (req, res) => {
 
 const createTestimonial = asyncHandler(async (req, res) => {
     const { name, role, image, text, rating, video } = req.body;
-    console.log("HEre", req.image);
-    if (!name || !role || !image || !text || !rating || !video) {
+
+    if (!name || !role || !text || !rating || !video) {
         throw new ApiError(400, "All fields are required");
     }  
 
     if(!req.files || !req.files.image || !req.files.image[0]) {
         throw new ApiError(400, "Image is required");
     }
-    req.body.image = req.files.image[0].path;
-
-    // Check if the image is a valid URL or file path/buffer
-    let imageUrl;
-    if (image) {
-        // If image is a local file path or buffer
-        const uploadedImage = await uploadOnCloudinary(image);
-        if (!uploadedImage) {
-            throw new ApiError(400, "Image upload failed");
-        }
-        imageUrl = uploadedImage.url;
-    } else {
-        throw new ApiError(400, "Image is required");
+    
+    // Upload image to cloudinary
+    const uploadedImage = await uploadOnCloudinary(req.files.image[0].path);
+    if (!uploadedImage) {
+        throw new ApiError(400, "Image upload failed");
     }
-
-    // Replace the original image value with the Cloudinary URL
-    req.body.image = imageUrl;
+    const imageUrl = uploadedImage.url;
 
     const testimonial = await Testimonial.create({
         name,
         role,
-        image,
+        image: imageUrl,
         text,
         rating,
         video
@@ -65,10 +55,22 @@ const updateTestimonial = asyncHandler(async (req, res) => {
     if (!testimonial) {
         throw new ApiError(404, "Testimonial not found");
     }
+    let nImage = null;
+    if(req.files && req.files.image && req.files.image[0]) {
+        await deleteFromCloudinary(testimonial.image);
+        // Upload image to cloudinary
+        const uploadedImage = await uploadOnCloudinary(req.files.image[0].path);
+        if (!uploadedImage) {
+            throw new ApiError(400, "Image upload failed");
+        }
+        const imageUrl = uploadedImage.url;
+        testimonial.image = imageUrl;
+        nImage = imageUrl;
+    }
 
     testimonial.name = name || testimonial.name;
     testimonial.role = role || testimonial.role;
-    testimonial.image = image || testimonial.image;
+    testimonial.image = nImage || testimonial.image;
     testimonial.text = text || testimonial.text;
     testimonial.rating = rating || testimonial.rating;
     testimonial.video = video || testimonial.video;
@@ -80,4 +82,19 @@ const updateTestimonial = asyncHandler(async (req, res) => {
     );
 });
 
-export { getTestimonials, createTestimonial, updateTestimonial };
+const deleteTestimonial = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    const testimonial = await Testimonial.findById(id);
+    if (!testimonial) {
+        throw new ApiError(404, "Testimonial not found");
+    }
+
+    await testimonial.deleteOne();
+
+    return res.status(200).json(
+        new ApiResponse(200, null, "Testimonial deleted successfully")
+    );
+});
+
+export { getTestimonials, createTestimonial, updateTestimonial, deleteTestimonial };
