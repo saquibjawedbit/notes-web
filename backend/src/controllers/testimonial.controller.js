@@ -17,12 +17,15 @@ const getTestimonials = asyncHandler(async (req, res) => {
 
 const createTestimonial = asyncHandler(async (req, res) => {
     const { name, role, image, text, rating, video } = req.body;
-
+    console.log("HEre", req.image);
     if (!name || !role || !image || !text || !rating || !video) {
         throw new ApiError(400, "All fields are required");
-    }
+    }  
 
-    // Import cloudinary config if not already imported at the top of the file
+    if(!req.files || !req.files.image || !req.files.image[0]) {
+        throw new ApiError(400, "Image is required");
+    }
+    req.body.image = req.files.image[0].path;
 
     // Check if the image is a valid URL or file path/buffer
     let imageUrl;

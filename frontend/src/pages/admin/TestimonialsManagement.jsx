@@ -57,6 +57,7 @@ export default function TestimonialsManagement() {
             if (isEditing) {
                 await axios.put(`/api/v1/testimonials/${selectedTestimonial._id}`, formData);
             } else {
+                console.log('formData:', formData);
                 await axios.post('/api/v1/testimonials', formData);
             }
             fetchTestimonials();

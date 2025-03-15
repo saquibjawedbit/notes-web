@@ -10,8 +10,6 @@ import axios from "axios";
 
 const getSubject = asyncHandler(async (req, res) => {
     const {grade} = req.params;
-
-
     //Grade is null
     if(!grade) {
         throw new ApiError('Grade is Required');
