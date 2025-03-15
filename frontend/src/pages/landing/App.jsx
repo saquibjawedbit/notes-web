@@ -16,8 +16,9 @@ function App() {
   useEffect(() => {
     axios.get('/api/v1/testimonials')
       .then(response => {
-        if(response.data)
-        setTestimonials(response.data);
+        console.log(response.data.data);
+        if(response.data.data)
+        setTestimonials(response.data.data);
       })
       .catch(error => {
         console.error('Error fetching testimonials:', error);
