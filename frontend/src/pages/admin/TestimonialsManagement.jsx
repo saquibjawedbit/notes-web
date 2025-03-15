@@ -31,7 +31,7 @@ export default function TestimonialsManagement() {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this testimonial?')) {
             try {
-                await axios.delete(`/api/v1/testimonials/${id}`);
+                await axios.delete(`${import.meta.env.VITE_API_URL}/api/v1/testimonials/${id}`);
                 setTestimonials(testimonials.filter(testimonial => testimonial._id !== id));
             } catch (err) {
                 console.error('Error deleting testimonial:', err);
@@ -64,13 +64,13 @@ export default function TestimonialsManagement() {
 
 
             if (isEditing) {
-                await axios.put(`/api/v1/testimonials/${selectedTestimonial._id}`, formDataToSend, {
+                await axios.put(`${import.meta.env.VITE_API_URL}/api/v1/testimonials/${selectedTestimonial._id}`, formDataToSend, {
                     headers: {
                         "Content-Type": "multipart/form-data", // Set proper headers
                     },
                 });
             } else {
-                await axios.post("/api/v1/testimonials", formDataToSend, {
+                await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/testimonials`, formDataToSend, {
                     headers: {
                         "Content-Type": "multipart/form-data", // Set proper headers
                     },

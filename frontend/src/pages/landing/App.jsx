@@ -14,10 +14,8 @@ function App() {
   const [testimonials, setTestimonials] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/v1/testimonials')
+    axios.get(`${import.meta.env.VITE_API_URL}/api/v1/testimonials`)
       .then(response => {
-        console.log(response.data.data);
-        console.log("Here", response.data);
         if(response.data.data)
         setTestimonials(response.data.data);
       })
