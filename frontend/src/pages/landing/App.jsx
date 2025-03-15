@@ -16,7 +16,7 @@ function App() {
   useEffect(() => {
     axios.get('/api/v1/testimonials')
       .then(response => {
-        console.log('Testimonials:', response.data.data);
+        if(response.data.date)
         setTestimonials(response.data.data);
       })
       .catch(error => {
