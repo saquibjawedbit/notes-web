@@ -16,6 +16,7 @@ function App() {
   useEffect(() => {
     axios.get('/api/v1/testimonials')
       .then(response => {
+        console.log('Testimonials:', response.data.data);
         setTestimonials(response.data.data);
       })
       .catch(error => {
