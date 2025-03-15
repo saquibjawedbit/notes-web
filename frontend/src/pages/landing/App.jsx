@@ -17,7 +17,7 @@ function App() {
     axios.get('/api/v1/testimonials')
       .then(response => {
         console.log(response.data.data);
-        console.log(response.data);
+        console.log("Here", response.data);
         if(response.data.data)
         setTestimonials(response.data.data);
       })
